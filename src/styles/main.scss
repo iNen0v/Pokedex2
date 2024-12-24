@@ -78,54 +78,103 @@ body {
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+  }
 }
+
 .pokemon-card {
   background: rgba(0, 0, 0, 0.8);
   border-radius: 15px;
-  padding: 1rem;
+  padding: 1.5rem;
   color: #fff;
   display: flex;
   flex-direction: column;
   position: relative;
   height: 100%;
   min-height: 350px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  @media (max-width: 480px) {
+    padding: 1rem;
+    min-height: 300px;
+  }
 
   .pokemon-number {
     position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
+    top: 1rem;
+    right: 1rem;
     color: rgba(255, 255, 255, 0.6);
-    font-size: 0.8rem;
+    font-size: 0.9rem;
   }
 
   .pokemon-image {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
     object-fit: contain;
-    margin: 0 auto 0.5rem;
+    margin: 0 auto 1rem;
+
+    @media (max-width: 480px) {
+      width: 100px;
+      height: 100px;
+    }
   }
 
   .pokemon-info {
     text-align: center;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
 
     h3 {
       color: white;
-      font-size: 1.1rem;
-      margin: 0.3rem 0;
+      font-size: 1.2rem;
+      margin: 0.5rem 0;
       text-transform: capitalize;
+
+      @media (max-width: 480px) {
+        font-size: 1rem;
+      }
+    }
+
+    .types {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin: 0.5rem 0;
+
+      .type {
+        padding: 0.3rem 1rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+
+        @media (max-width: 480px) {
+          padding: 0.2rem 0.8rem;
+          font-size: 0.7rem;
+        }
+      }
     }
   }
 
   .stats-section {
     margin-top: auto;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
+
+    @media (max-width: 480px) {
+      font-size: 0.7rem;
+    }
 
     .stat-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin: 0.15rem 0;
+      margin: 0.3rem 0;
 
       .stat-name {
         flex: 1;
@@ -136,58 +185,35 @@ body {
         width: 25px;
         text-align: center;
         font-weight: bold;
-        color: #000000; // Черен текст
-        background-color: #4CAF50 !important; // Зелен фон (може да промените този цвят)
+        color: #000000;
+        background-color: #4CAF50;
         padding: 2px 4px;
         border-radius: 3px;
       }
 
       .stat-bar {
         flex: 2;
-        height: 4px;
+        height: 6px;
         background: rgba(255, 255, 255, 0.2);
-        border-radius: 2px;
+        border-radius: 3px;
         margin-left: 5px;
         overflow: hidden;
 
         .stat-fill {
           height: 100%;
-          background: linear-gradient(to right, #4CAF50, #45a049);
+          background: linear-gradient(to right, var(--primary-color), #ff6b6b);
         }
       }
     }
   }
 
-  .weak-against,
-.resistant-to,
-.immune-to {
-  margin-top: 0.5rem;
-  font-size: 0.7rem;
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 0.3rem;
-  border-radius: 5px;
+  .type-advantages {
+    margin-top: 0.5rem;
+    font-size: 0.7rem;
 
-  .type-title {
-    color: #ffffff;
-    margin-bottom: 0.2rem;
-    font-weight: bold;
-  }
-
-  .type-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.2rem;
-  }
-
-  .type {
-    padding: 0.1rem 0.3rem;
-    border-radius: 3px;
-    font-size: 0.6rem;
-    color: #000000;
-    font-weight: bold;
-  }
-}
-}
+    @media (max-width: 480px) {
+      font-size: 0.6rem;
+    }
 
     .type-title {
       color: rgba(255, 255, 255, 0.9);
@@ -199,48 +225,22 @@ body {
       display: flex;
       flex-wrap: wrap;
       gap: 0.1rem;
+      justify-content: center;
 
       .type {
         padding: 0.05rem 0.15rem;
         border-radius: 3px;
-        font-size: 0.5rem;
-      }
-    }
-  
+        font-size: 0.6rem;
+        margin: 0.05rem;
 
-  .resistant-to {
-    margin-top: 0.2rem;
-  }
-
-
-  .weak-against,
-  .resistant-to {
-    margin-top: 0.3rem;
-    font-size: 0.55rem;
-
-    .type-title {
-      color: rgba(255, 255, 255, 0.9);
-      margin-bottom: 0.1rem;
-      font-weight: bold;
-    }
-
-    .type-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.1rem;
-      justify-content: flex-start;
-
-      .type {
-        padding: 0.05rem 0.15rem;
-        border-radius: 3px;
-        font-size: 0.5rem;
+        @media (max-width: 480px) {
+          padding: 0.03rem 0.1rem;
+          font-size: 0.5rem;
+        }
       }
     }
   }
-
-  .resistant-to {
-    margin-top: 0.2rem;
-  }
+}
 
 
 // Pokemon Types
@@ -806,3 +806,103 @@ body {
     display: none;
   }
 }
+.pokemon-list-item {
+  background: #1a1a1a;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.pokemon-stats {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.stat-bar {
+  background: #2a2a2a;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.stat-value {
+  height: 100%;
+  background: #4a4a4a;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: #fff;
+}
+
+.type-badges {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.type-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.pokemon-number {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.875rem;
+}
+
+.pokemon-image {
+  width: 96px;
+  height: 96px;
+  margin: 1rem auto;
+  display: block;
+}
+
+.pokemon-name {
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: white;
+  text-transform: capitalize;
+}
+.pokemon-card {
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 1rem;
+  color: white;
+  height: 100%;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Общи стилове за контейнера */
+.infinite-scroll-component {
+  -ms-overflow-style: none;  /* IE и Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.type-grass { background-color: #78c850; }
+.type-poison { background-color: #a040a0; }
+.type-fire { background-color: #f08030; }
+.type-water { background-color: #6890f0; }
+.type-bug { background-color: #a8b820; }
+.type-flying { background-color: #a890f0; }
+.type-normal { background-color: #a8a878; }
+.type-electric { background-color: #f8d030; }
+.type-ground { background-color: #e0c068; }
+.type-fairy { background-color: #ee99ac; }
+.type-fighting { background-color: #c03028; }
+.type-psychic { background-color: #f85888; }
+.type-rock { background-color: #b8a038; }
+.type-steel { background-color: #b8b8d0; }
+.type-ice { background-color: #98d8d8; }
+.type-ghost { background-color: #705898; }
+.type-dragon { background-color: #7038f8; }
+.type-dark { background-color: #705848; }

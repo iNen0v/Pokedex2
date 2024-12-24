@@ -1,0 +1,230 @@
+.battle-arena {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #1a1a2e, #16213e, #1a1a2e);
+}
+
+.battle-arena__header {
+  height: 0.5rem;
+  background: linear-gradient(to right, #4f46e5, #7e22ce, #ec4899);
+}
+
+.battle-arena__container {
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  max-width: 1200px;
+}
+
+.battle-arena__title {
+  font-size: 3rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 3rem;
+  background: linear-gradient(to right, #60a5fa, #a78bfa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.battle-arena__battle-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Pokemon Card Styles */
+.battle-arena__pokemon-card {
+  flex: 1;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(75, 85, 99, 0.4);
+  transition: all 0.3s;
+}
+
+.battle-arena__pokemon-card--active {
+  border: 2px solid #fbbf24;
+  animation: pulse 2s infinite;
+}
+
+.battle-arena__pokemon-card-image {
+  width: 10rem;
+  height: 10rem;
+  margin: 0 auto;
+  transition: transform 0.3s;
+}
+
+.battle-arena__pokemon-card-image:hover {
+  transform: scale(1.1);
+}
+
+.battle-arena__pokemon-card-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  text-transform: capitalize;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+/* HP Section */
+.battle-arena__pokemon-card-hp {
+  margin-bottom: 1.5rem;
+}
+
+.battle-arena__pokemon-card-hp-text {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: #d1d5db;
+  margin-bottom: 0.25rem;
+}
+
+.battle-arena__pokemon-card-hp-bar {
+  height: 1rem;
+  background: #374151;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.battle-arena__pokemon-card-hp-bar-fill {
+  height: 100%;
+  transition: width 0.3s;
+}
+
+.battle-arena__pokemon-card-hp-bar-fill--high {
+  background-color: #22c55e;
+}
+
+.battle-arena__pokemon-card-hp-bar-fill--medium {
+  background-color: #eab308;
+}
+
+.battle-arena__pokemon-card-hp-bar-fill--low {
+  background-color: #ef4444;
+}
+
+/* Moves Section */
+.battle-arena__pokemon-card-moves {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.battle-arena__pokemon-card-moves-button {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  color: white;
+  transition: all 0.2s;
+}
+
+.battle-arena__pokemon-card-moves-button--active {
+  background: linear-gradient(to right, #2563eb, #3b82f6);
+}
+
+.battle-arena__pokemon-card-moves-button--active:hover {
+  background: linear-gradient(to right, #3b82f6, #60a5fa);
+  transform: scale(1.02);
+}
+
+.battle-arena__pokemon-card-moves-button--disabled {
+  background: #374151;
+  cursor: not-allowed;
+}
+
+/* VS Section */
+.battle-arena__vs {
+  text-align: center;
+}
+
+.battle-arena__vs-text {
+  font-size: 4rem;
+  font-weight: bold;
+  color: #ef4444;
+  margin-bottom: 1.5rem;
+  animation: pulse 2s infinite;
+}
+
+.battle-arena__vs-button {
+  padding: 0.75rem 1.5rem;
+  background: #374151;
+  color: white;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+}
+
+.battle-arena__vs-button:hover {
+  background: #4b5563;
+  transform: scale(1.05);
+}
+
+/* Battle Log */
+.battle-arena__battle-log {
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(75, 85, 99, 0.4);
+}
+
+.battle-arena__battle-log-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.battle-arena__battle-log-container {
+  max-height: 10rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.battle-arena__battle-log-entry {
+  padding: 0.5rem 1rem;
+  color: #d1d5db;
+  border-radius: 0.5rem;
+  background: rgba(55, 65, 81, 0.5);
+  transition: background 0.3s;
+}
+
+.battle-arena__battle-log-entry:hover {
+  background: rgba(75, 85, 99, 0.7);
+}
+
+/* New Game Button */
+.battle-arena__new-game {
+  margin-top: 2rem;
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+  font-weight: bold;
+  color: white;
+  border-radius: 0.5rem;
+  background: linear-gradient(to right, #059669, #10b981);
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  transition: all 0.2s;
+}
+
+.battle-arena__new-game:hover {
+  background: linear-gradient(to right, #10b981, #34d399);
+  transform: scale(1.05);
+}
+
+/* Animations */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}

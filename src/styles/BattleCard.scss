@@ -1,0 +1,104 @@
+.battle-card {
+    background-color: #111;
+    padding: 1rem;
+    
+    .pokemon-id {
+      color: #666;
+    }
+  
+    .pokemon-name {
+      color: #fff;
+      text-align: center;
+      margin: 1rem 0;
+      font-size: 1.2rem;
+    }
+  
+    .stats {
+      margin-bottom: 1rem;
+  
+      .stat-row {
+        display: flex;
+        justify-content: space-between;
+  
+        .stat-name {
+          color: #666;
+        }
+  
+        .stat-value {
+          color: #fff;
+        }
+      }
+    }
+  
+    .damage-section {
+      margin: 1rem 0;
+  
+      .section-title {
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+      }
+  
+      &.weak .section-title {
+        color: #ff4444;
+      }
+  
+      &.strong .section-title {
+        color: #44ff44;
+      }
+  
+      &.resistant .section-title {
+        color: #8080ff;
+      }
+  
+      .type-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+  
+        .type {
+          padding: 2px 8px;
+          border-radius: 4px;
+          color: #000;
+  
+          &-fire { background-color: #ff4422; }
+          &-water { background-color: #3399ff; }
+          &-grass { background-color: #77cc55; }
+          &-electric { background-color: #ffcc33; }
+          &-ice { background-color: #66ccff; }
+          &-fighting { background-color: #bb5544; }
+          &-poison { background-color: #aa5599; }
+          &-ground { background-color: #ddbb55; }
+          &-flying { background-color: #8899ff; }
+          &-psychic { background-color: #ff5599; }
+          &-bug { background-color: #aabb22; }
+          &-rock { background-color: #bbaa66; }
+          &-ghost { background-color: #6666bb; }
+          &-dragon { background-color: #7766ee; }
+          &-dark { background-color: #775544; }
+          &-steel { background-color: #aaaabb; }
+          &-fairy { background-color: #ee99ee; }
+        }
+      }
+    }
+  
+    .battle-moves {
+      .moves-title {
+        color: #4477ff;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+      }
+  
+      .move-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+  
+        .move {
+          background: #222;
+          padding: 0.25rem 0.5rem;
+          border-radius: 4px;
+          color: #fff;
+        }
+      }
+    }
+  }

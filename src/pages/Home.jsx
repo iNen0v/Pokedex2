@@ -1,142 +1,100 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
 import PokemonList from '../components/PokemonList';
 import Filters from '../components/Filters';
-import LoadMore from '../components/LoadMore';
-import { useFavorites } from '../hooks/useFavorites';
+import { fetchPokemons } from '../redux/actions';
 
 function Home() {
-  const [pokemons, setPokemons] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [search, setSearch] = useState('');
-  const [displayLimit, setDisplayLimit] = useState(20);
+  const dispatch = useDispatch();
+  const { data: pokemons, loading } = useSelector(state => state.pokemons);
   const [sortBy, setSortBy] = useState('id');
   const [filters, setFilters] = useState({
     type: '',
     minAttack: '',
-    minDefense: '',
+    minDefense: ''
   });
-  const [favorites, toggleFavorite] = useFavorites();
-  const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
 
   useEffect(() => {
-    fetchPokemons();
-  }, []);
+    dispatch(fetchPokemons());
+  }, [dispatch]);
 
-  const fetchPokemons = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=151');
-      const results = response.data.results;
-      
-      const detailedPokemons = await Promise.all(
-        results.map(async (pokemon) => {
-          const detailResponse = await axios.get(pokemon.url);
-          return detailResponse.data;
-        })
+  const filterAndSortPokemons = () => {
+    let filtered = pokemons;
+
+    if (filters.type) {
+      filtered = filtered.filter(pokemon =>
+        pokemon.types.some(t => t.type.name === filters.type)
       );
-      
-      setPokemons(detailedPokemons);
-    } catch (err) {
-      console.error('Error fetching Pokemon:', err);
-      setError('Error loading Pokémon');
     }
-    setLoading(false);
+
+    if (filters.minAttack) {
+      filtered = filtered.filter(pokemon =>
+        pokemon.stats[1].base_stat >= parseInt(filters.minAttack)
+      );
+    }
+
+    if (filters.minDefense) {
+      filtered = filtered.filter(pokemon =>
+        pokemon.stats[2].base_stat >= parseInt(filters.minDefense)
+      );
+    }
+
+    return [...filtered].sort((a, b) => {
+      switch(sortBy) {
+        case 'name':
+          return a.name.localeCompare(b.name);
+        case 'attack':
+          return b.stats[1].base_stat - a.stats[1].base_stat;
+        case 'defense':
+          return b.stats[2].base_stat - a.stats[2].base_stat;
+        default:
+          return a.id - b.id;
+      }
+    });
   };
 
-  const loadMore = () => {
-    setDisplayLimit(prev => prev + 20);
-  };
-
-  const filteredPokemons = pokemons.filter(pokemon => {
-    const matchesSearch = pokemon.name.toLowerCase().includes(search.toLowerCase());
-    const matchesType = !filters.type || pokemon.types.some(t => t.type.name === filters.type);
-    const matchesAttack = !filters.minAttack || pokemon.stats[1].base_stat >= parseInt(filters.minAttack);
-    const matchesDefense = !filters.minDefense || pokemon.stats[2].base_stat >= parseInt(filters.minDefense);
-    const matchesFavorites = !showOnlyFavorites || favorites.includes(pokemon.id);
-    
-    return matchesSearch && matchesType && matchesAttack && matchesDefense && matchesFavorites;
-  });
-
-  const sortedPokemon = [...filteredPokemons].sort((a, b) => {
-    switch(sortBy) {
-      case 'name':
-        return a.name.localeCompare(b.name);
-      case 'attack':
-        return b.stats[1].base_stat - a.stats[1].base_stat;
-      case 'defense':
-        return b.stats[2].base_stat - a.stats[2].base_stat;
-      default:
-        return a.id - b.id;
-    }
-  });
-
-  const currentPokemons = sortedPokemon.slice(0, displayLimit);
+  const filteredAndSortedPokemons = filterAndSortPokemons();
 
   return (
-    <motion.div
-      className="home"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-    >
-      <div className="logo-container">
+    <div className="min-h-screen bg-gray-900 text-white">
+      <div className="w-full max-w-[300px] mx-auto py-6">
         <img
           src="https://upload.wikimedia.org/wikipedia/commons/9/98/International_Pok%C3%A9mon_logo.svg"
-          alt="Pokémon Logo"
-          className="pokemon-logo"
+          alt="Pokemon Logo"
+          className="w-full"
         />
       </div>
 
-      <div className="search-section">
-        <input
-          type="text"
-          placeholder="Search Pokémon..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="search-input"
-        />
+      <div className="container mx-auto px-4 py-8">
+        <div className="mb-8">
+          <div className="flex gap-4">
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="p-2 rounded bg-gray-800 text-white"
+            >
+              <option value="id">Number</option>
+              <option value="name">Name</option>
+              <option value="attack">Attack</option>
+              <option value="defense">Defense</option>
+            </select>
 
-        <select
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
-          className="sort-select"
-        >
-          <option value="id">Number</option>
-          <option value="name">Name</option>
-          <option value="attack">Attack</option>
-          <option value="defense">Defense</option>
-        </select>
+            <Filters filters={filters} setFilters={setFilters} />
+          </div>
+        </div>
 
-        <Filters filters={filters} setFilters={setFilters} />
-
-        <button onClick={() => setShowOnlyFavorites(!showOnlyFavorites)}>
-          {showOnlyFavorites ? 'Show All' : 'Show Favorites'}
-        </button>
-      </div>
-
-      {loading ? (
-        <div className="loading">Loading...</div>
-      ) : error ? (
-        <div className="error">{error}</div>
-      ) : (
-        <>
-          <PokemonList 
-            pokemons={currentPokemons}
-            favorites={favorites}
-            toggleFavorite={toggleFavorite}
+        {loading ? (
+          <div className="text-center">Loading...</div>
+        ) : (
+          <PokemonList
+            pokemons={filteredAndSortedPokemons}
+            onPokemonSelect={() => {}}
+            battleMode={false}
           />
-          {displayLimit < sortedPokemon.length && (
-            <LoadMore
-              loadMore={loadMore}
-              isLoading={loading}
-            />
-          )}
-        </>
-      )}
-    </motion.div>
+        )}
+      </div>
+    </div>
   );
 }
 

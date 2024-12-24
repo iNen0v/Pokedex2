@@ -28,3 +28,4 @@ function BattleHistory() {
       </div>
     );
    }
+export default BattleHistory;

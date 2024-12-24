@@ -13,7 +13,8 @@ function FavoriteButton({ pokemonId }) {
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}
     >
-      {isFavorite ? '★' : '☆'}
+      {isFavorite ? '♥' : '♡'}
     </motion.button>
   );
 }
+export default FavoriteButton;
