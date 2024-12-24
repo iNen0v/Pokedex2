@@ -29,6 +29,12 @@ const typeColors = {
  fairy: '#EE99AC'
 };
 
+const quickFilters = [
+ { name: 'Strong Attackers', attack: 100, defense: 0 },
+ { name: 'Tanks', attack: 0, defense: 100 },
+ { name: 'Balanced', attack: 70, defense: 70 }
+];
+
 function Filters({ filters, setFilters }) {
  const handleClearFilters = () => {
    setFilters({
@@ -45,65 +51,90 @@ function Filters({ filters, setFilters }) {
      animate={{ opacity: 1, y: 0 }}
      transition={{ duration: 0.3 }}
    >
-     <div className="filters__group">
-       <label className="filters__label">Type</label>
-       <select 
-         value={filters.type} 
-         onChange={(e) => setFilters({...filters, type: e.target.value})}
-         className="filters__select"
-       >
-         <option value="">All types</option>
-         {pokemonTypes.map(type => (
-           <option 
-             key={type} 
-             value={type}
-             style={{background: typeColors[type]}}
-           >
-             {type.charAt(0).toUpperCase() + type.slice(1)}
-           </option>
-         ))}
-       </select>
+     <div className="filters__quick">
+       {quickFilters.map(filter => (
+         <button
+           key={filter.name}
+           onClick={() => setFilters({
+             ...filters,
+             minAttack: filter.attack,
+             minDefense: filter.defense
+           })}
+           className="filters__quick-button"
+         >
+           {filter.name}
+         </button>
+       ))}
      </div>
 
-     <div className="filters__group">
-       <label className="filters__label">Min Attack</label>
-       <div className="filters__input-wrapper">
-         <input
-           type="range"
-           min="0"
-           max="150"
-           value={filters.minAttack || 0}
-           onChange={(e) => setFilters({...filters, minAttack: e.target.value})}
-           className="filters__range"
-         />
-         <input
-           type="number"
-           placeholder="0"
-           value={filters.minAttack}
-           onChange={(e) => setFilters({...filters, minAttack: e.target.value})}
-           className="filters__number"
-         />
+     <div className="filters__types">
+       <label className="filters__label">Types</label>
+       <div className="filters__type-grid">
+         {pokemonTypes.map(type => (
+           <button
+             key={type}
+             onClick={() => setFilters({...filters, type})}
+             className={`filters__type-button ${filters.type === type ? 'active' : ''}`}
+             style={{'--type-color': typeColors[type]}}
+           >
+             <img src={`/types/${type}.svg`} alt={type} className="filters__type-icon" />
+             <span>{type}</span>
+           </button>
+         ))}
        </div>
      </div>
 
-     <div className="filters__group">
-       <label className="filters__label">Min Defense</label>
-       <div className="filters__input-wrapper">
-         <input
-           type="range"
-           min="0"
-           max="150"
-           value={filters.minDefense || 0}
-           onChange={(e) => setFilters({...filters, minDefense: e.target.value})}
-           className="filters__range"
-         />
-         <input
-           type="number"
-           placeholder="0"
-           value={filters.minDefense}
-           onChange={(e) => setFilters({...filters, minDefense: e.target.value})}
-           className="filters__number"
-         />
+     <div className="filters__stats">
+       <div className="filters__stat">
+         <label className="filters__label">
+           Attack: {filters.minAttack || 0}
+         </label>
+         <div className="filters__slider-container">
+           <input
+             type="range"
+             min="0"
+             max="150"
+             value={filters.minAttack || 0}
+             onChange={(e) => setFilters({...filters, minAttack: e.target.value})}
+             className="filters__range"
+             style={{
+               background: `linear-gradient(to right, #ef4444 ${(filters.minAttack || 0) / 1.5}%, rgba(55, 65, 81, 0.8) ${(filters.minAttack || 0) / 1.5}%)`
+             }}
+           />
+           <input
+             type="number"
+             value={filters.minAttack}
+             onChange={(e) => setFilters({...filters, minAttack: e.target.value})}
+             className="filters__number"
+             placeholder="0"
+           />
+         </div>
+       </div>
+
+       <div className="filters__stat">
+         <label className="filters__label">
+           Defense: {filters.minDefense || 0}
+         </label>
+         <div className="filters__slider-container">
+           <input
+             type="range"
+             min="0"
+             max="150"
+             value={filters.minDefense || 0}
+             onChange={(e) => setFilters({...filters, minDefense: e.target.value})}
+             className="filters__range"
+             style={{
+               background: `linear-gradient(to right, #3b82f6 ${(filters.minDefense || 0) / 1.5}%, rgba(55, 65, 81, 0.8) ${(filters.minDefense || 0) / 1.5}%)`
+             }}
+           />
+           <input
+             type="number"
+             value={filters.minDefense}
+             onChange={(e) => setFilters({...filters, minDefense: e.target.value})}
+             className="filters__number"
+             placeholder="0"
+           />
+         </div>
        </div>
      </div>
 
@@ -111,7 +142,7 @@ function Filters({ filters, setFilters }) {
        onClick={handleClearFilters}
        className="filters__clear"
      >
-       Clear Filters
+       Clear All Filters
      </button>
    </motion.div>
  );
