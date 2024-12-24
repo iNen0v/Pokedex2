@@ -3,149 +3,133 @@ import { motion } from 'framer-motion';
 import '../styles/Filters.scss';
 
 const pokemonTypes = [
- "normal", "fire", "water", "grass", "electric", "ice", 
- "fighting", "poison", "ground", "flying", "psychic", 
- "bug", "rock", "ghost", "dark", "dragon", "steel", "fairy"
+  "normal", "fire", "water", "grass", "electric", "ice", 
+  "fighting", "poison", "ground", "flying", "psychic", 
+  "bug", "rock", "ghost", "dark", "dragon", "steel", "fairy"
 ];
 
 const typeColors = {
- normal: '#A8A878',
- fire: '#F08030',
- water: '#6890F0',
- grass: '#78C850',
- electric: '#F8D030',
- ice: '#98D8D8',
- fighting: '#C03028',
- poison: '#A040A0',
- ground: '#E0C068',
- flying: '#A890F0',
- psychic: '#F85888',
- bug: '#A8B820',
- rock: '#B8A038',
- ghost: '#705898',
- dark: '#705848',
- dragon: '#7038F8',
- steel: '#B8B8D0',
- fairy: '#EE99AC'
+  normal: '#A8A878',
+  fire: '#fa0707',
+  water: '#6890F0',
+  grass: '#78C850',
+  electric: '#F8D030',
+  ice: '#98D8D8',
+  fighting: '#c06c28',
+  poison: '#A040A0',
+  ground: '#E0C068',
+  flying: '#A890F0',
+  psychic: '#F85888',
+  bug: '#A8B820',
+  rock: '#B8A038',
+  ghost: '#705898',
+  dark: '#705848',
+  dragon: '#7038F8',
+  steel: '#B8B8D0',
+  fairy: '#EE99AC'
 };
 
-const quickFilters = [
- { name: 'Strong Attackers', attack: 100, defense: 0 },
- { name: 'Tanks', attack: 0, defense: 100 },
- { name: 'Balanced', attack: 70, defense: 70 }
-];
-
 function Filters({ filters, setFilters }) {
- const handleClearFilters = () => {
-   setFilters({
-     type: '',
-     minAttack: '',
-     minDefense: ''
-   });
- };
+  const hasActiveFilters = filters.type || filters.minAttack || filters.minDefense;
 
- return (
-   <motion.div 
-     className="filters"
-     initial={{ opacity: 0, y: 20 }}
-     animate={{ opacity: 1, y: 0 }}
-     transition={{ duration: 0.3 }}
-   >
-     <div className="filters__quick">
-       {quickFilters.map(filter => (
-         <button
-           key={filter.name}
-           onClick={() => setFilters({
-             ...filters,
-             minAttack: filter.attack,
-             minDefense: filter.defense
-           })}
-           className="filters__quick-button"
-         >
-           {filter.name}
-         </button>
-       ))}
-     </div>
+  const handleClearFilters = () => {
+    setFilters({ type: '', minAttack: '', minDefense: '' });
+  };
 
-     <div className="filters__types">
-       <label className="filters__label">Types</label>
-       <div className="filters__type-grid">
-         {pokemonTypes.map(type => (
-           <button
-             key={type}
-             onClick={() => setFilters({...filters, type})}
-             className={`filters__type-button ${filters.type === type ? 'active' : ''}`}
-             style={{'--type-color': typeColors[type]}}
-           >
-             <img src={`/types/${type}.svg`} alt={type} className="filters__type-icon" />
-             <span>{type}</span>
-           </button>
-         ))}
-       </div>
-     </div>
+  return (
+    <motion.div 
+      className="filters"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      {/* Sort Options */}
+      <select 
+        value={filters.sortBy || 'id'} 
+        onChange={(e) => setFilters({ ...filters, sortBy: e.target.value })}
+        className="filters__sort"
+      >
+        <option value="id">Number</option>
+        <option value="name">Name</option>
+      </select>
 
-     <div className="filters__stats">
-       <div className="filters__stat">
-         <label className="filters__label">
-           Attack: {filters.minAttack || 0}
-         </label>
-         <div className="filters__slider-container">
-           <input
-             type="range"
-             min="0"
-             max="150"
-             value={filters.minAttack || 0}
-             onChange={(e) => setFilters({...filters, minAttack: e.target.value})}
-             className="filters__range"
-             style={{
-               background: `linear-gradient(to right, #ef4444 ${(filters.minAttack || 0) / 1.5}%, rgba(55, 65, 81, 0.8) ${(filters.minAttack || 0) / 1.5}%)`
-             }}
-           />
-           <input
-             type="number"
-             value={filters.minAttack}
-             onChange={(e) => setFilters({...filters, minAttack: e.target.value})}
-             className="filters__number"
-             placeholder="0"
-           />
-         </div>
-       </div>
+      {/* Type Filters */}
+      <div className="filters__types">
+        <label className="filters__label">Types</label>
+        <div className="filters__type-grid">
+          {pokemonTypes.map(type => (
+            <button
+              key={type}
+              onClick={() => setFilters({ ...filters, type })}
+              className={`filters__type-button ${filters.type === type ? 'active' : ''}`}
+              style={{
+                backgroundColor: `${typeColors[type]}40`,
+                borderColor: filters.type === type ? typeColors[type] : 'transparent'
+              }}
+            >
+              <div 
+                className="filters__type-indicator"
+                style={{ backgroundColor: typeColors[type] }}
+              />
+              <span style={{ color: filters.type === type ? typeColors[type] : '#fff' }}>
+                {type}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
 
-       <div className="filters__stat">
-         <label className="filters__label">
-           Defense: {filters.minDefense || 0}
-         </label>
-         <div className="filters__slider-container">
-           <input
-             type="range"
-             min="0"
-             max="150"
-             value={filters.minDefense || 0}
-             onChange={(e) => setFilters({...filters, minDefense: e.target.value})}
-             className="filters__range"
-             style={{
-               background: `linear-gradient(to right, #3b82f6 ${(filters.minDefense || 0) / 1.5}%, rgba(55, 65, 81, 0.8) ${(filters.minDefense || 0) / 1.5}%)`
-             }}
-           />
-           <input
-             type="number"
-             value={filters.minDefense}
-             onChange={(e) => setFilters({...filters, minDefense: e.target.value})}
-             className="filters__number"
-             placeholder="0"
-           />
-         </div>
-       </div>
-     </div>
+      {/* Stat Filters */}
+      <div className="filters__stats">
+        {[{ label: 'Attack', key: 'minAttack', color: '#ef4444' }, { label: 'Defense', key: 'minDefense', color: '#3b82f6' }].map(stat => (
+          <div key={stat.key} className="filters__stat">
+            <label className="filters__label">
+              {stat.label}: {filters[stat.key] || 0}
+            </label>
+            <div className="filters__slider-container">
+              <input
+                type="range"
+                min="0"
+                max="150"
+                value={filters[stat.key] || 0}
+                onChange={(e) => setFilters({ ...filters, [stat.key]: e.target.value })}
+                className="filters__range"
+                style={{
+                  background: `linear-gradient(to right, ${stat.color} ${(filters[stat.key] || 0) / 1.5}%, rgba(55, 65, 81, 0.8) ${(filters[stat.key] || 0) / 1.5}%)`
+                }}
+              />
+              <input
+                type="number"
+                value={filters[stat.key]}
+                onChange={(e) => setFilters({ ...filters, [stat.key]: e.target.value })}
+                className="filters__number"
+                placeholder="0"
+              />
+            </div>
+          </div>
+        ))}
 
-     <button 
-       onClick={handleClearFilters}
-       className="filters__clear"
-     >
-       Clear All Filters
-     </button>
-   </motion.div>
- );
+        {/* Clear Filters Button */}
+        <motion.button 
+          onClick={handleClearFilters}
+          className={`filters__clear ${hasActiveFilters ? 'active' : ''}`}
+          disabled={!hasActiveFilters}
+          initial={{ opacity: 0.6 }}
+          animate={{ 
+            opacity: [0.6, 1, 0.6],
+            scale: [1, 1.05, 1]
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        >
+          Clear All Filters
+        </motion.button>
+      </div>
+    </motion.div>
+  );
 }
 
 export default Filters;
