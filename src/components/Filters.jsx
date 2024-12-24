@@ -29,6 +29,14 @@ const typeColors = {
   fairy: '#EE99AC'
 };
 
+function getTypeButtonStyle(type, isActive) {
+  return {
+    backgroundColor: isActive ? typeColors[type] : `${typeColors[type]}30`,
+    borderColor: typeColors[type],
+    color: isActive ? '#fff' : typeColors[type],
+  };
+}
+
 function Filters({ filters, setFilters }) {
   const hasActiveFilters = filters.type || filters.minAttack || filters.minDefense;
 
@@ -62,18 +70,13 @@ function Filters({ filters, setFilters }) {
               key={type}
               onClick={() => setFilters({ ...filters, type })}
               className={`filters__type-button ${filters.type === type ? 'active' : ''}`}
-              style={{
-                backgroundColor: `${typeColors[type]}40`,
-                borderColor: filters.type === type ? typeColors[type] : 'transparent'
-              }}
+              style={getTypeButtonStyle(type, filters.type === type)}
             >
               <div 
                 className="filters__type-indicator"
                 style={{ backgroundColor: typeColors[type] }}
               />
-              <span style={{ color: filters.type === type ? typeColors[type] : '#fff' }}>
-                {type}
-              </span>
+              <span>{type}</span>
             </button>
           ))}
         </div>
