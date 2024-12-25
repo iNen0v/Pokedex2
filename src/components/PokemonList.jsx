@@ -47,7 +47,7 @@ function PokemonList({ pokemons, onPokemonSelect, selectedPokemonId, battleMode,
 
  const containerStyle = {
    width: '100%',
-   backgroundColor: '#1a1a1a',
+   backgroundColor: 'rgba(30, 41, 90, 0.4)',
    padding: '20px'
  };
 

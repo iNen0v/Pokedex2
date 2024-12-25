@@ -1,10 +1,32 @@
+// Home.jsx
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import PokemonList from '../components/PokemonList';
 import Filters from '../components/Filters';
 import { fetchPokemons } from '../redux/actions';
 import '../styles/Home.scss';
+
+const LoadingSpinner = () => (
+ <motion.div 
+   className="pokemon-home__loading"
+   initial={{ opacity: 0 }}
+   animate={{ opacity: 1 }}
+ >
+   <motion.div 
+     className="pokemon-home__pokeball-spinner"
+     animate={{ rotate: 360 }}
+     transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+   />
+   <motion.p
+     animate={{ opacity: [0.5, 1, 0.5] }}
+     transition={{ duration: 1.5, repeat: Infinity }}
+     className="pokemon-home__loading-text"
+   >
+     Loading Pokémon...
+   </motion.p>
+ </motion.div>
+);
 
 function Home() {
  const dispatch = useDispatch();
@@ -64,9 +86,9 @@ function Home() {
 
      <motion.div 
        className="pokemon-home__logo-container"
-       initial={{ y: -20, opacity: 0 }}
+       initial={{ y: -50, opacity: 0 }}
        animate={{ y: 0, opacity: 1 }}
-       transition={{ duration: 0.5 }}
+       transition={{ duration: 0.8, type: "spring" }}
      >
        <img
          src="https://upload.wikimedia.org/wikipedia/commons/9/98/International_Pok%C3%A9mon_logo.svg"
@@ -75,7 +97,12 @@ function Home() {
        />
      </motion.div>
 
-     <div className="pokemon-home__content">
+     <motion.div 
+       className="pokemon-home__content"
+       initial={{ opacity: 0 }}
+       animate={{ opacity: 1 }}
+       transition={{ delay: 0.3 }}
+     >
        <div className="pokemon-home__control-panel">
          <div className="pokemon-home__controls">
            <select
@@ -93,23 +120,25 @@ function Home() {
          </div>
        </div>
 
-       {loading ? (
-         <motion.div 
-           className="pokemon-home__loading"
-           animate={{ opacity: [0.5, 1, 0.5] }}
-           transition={{ duration: 1.5, repeat: Infinity }}
-         >
-           <div className="pokemon-home__loading-text">Loading Pokémon...</div>
-           <div className="pokemon-home__loading-spinner" />
-         </motion.div>
-       ) : (
-         <PokemonList
-           pokemons={filteredAndSortedPokemons}
-           onPokemonSelect={() => {}}
-           battleMode={false}
-         />
-       )}
-     </div>
+       <AnimatePresence mode="wait">
+         {loading ? (
+           <LoadingSpinner />
+         ) : (
+           <motion.div
+             key="pokemon-list"
+             initial={{ opacity: 0, y: 20 }}
+             animate={{ opacity: 1, y: 0 }}
+             exit={{ opacity: 0, y: -20 }}
+           >
+             <PokemonList
+               pokemons={filteredAndSortedPokemons}
+               onPokemonSelect={() => {}}
+               battleMode={false}
+             />
+           </motion.div>
+         )}
+       </AnimatePresence>
+     </motion.div>
    </div>
  );
 }
