@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import '../styles/PokemonCard.scss'
 
 function PokemonCard({ pokemon, isFavorite, isSelected }) {
   const [details, setDetails] = useState(null);
