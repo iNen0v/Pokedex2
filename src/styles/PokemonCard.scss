@@ -5,7 +5,7 @@
   transition: all 0.3s ease;
   border: 2px solid transparent;
   backdrop-filter: blur(8px);
-  background: rgba(30, 58, 138, 0.3); // base blue color with transparency
+  background: rgba(30, 58, 138, 0.3); 
   min-height: 300px;
 
   &.selected {

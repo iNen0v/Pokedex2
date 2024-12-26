@@ -1,120 +1,131 @@
 .pokemon-home {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
-    color: white;
-    position: relative;
-    overflow: hidden;
-   
-    &__background-pattern {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+  color: white;
+  position: relative;
+  overflow: hidden;
+
+  &__background-pattern {
       position: absolute;
       inset: 0;
       background-image: url('/pokeball-pattern.png');
       opacity: 0.05;
       pointer-events: none;
-    }
-   
-    &__decorative-line {
+  }
+
+  &__decorative-line {
       height: 0.5rem;
       background: linear-gradient(to right, #4f46e5, #7e22ce, #ec4899);
-    }
-   
-    &__logo-container {
+  }
+
+  &__logo-container {
       width: 100%;
       max-width: 300px;
       margin: 2rem auto;
       padding: 1rem 0;
-   
+
       @media (max-width: 768px) {
-        max-width: 200px;
-        margin: 1rem auto;
+          max-width: 200px;
+          margin: 1rem auto;
       }
-    }
-   
-    &__logo {
+  }
+
+  &__logo {
       width: 100%;
       filter: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 0.5));
-    }
-   
-    &__content {
+  }
+
+  &__content {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 1rem;
       position: relative;
       z-index: 10;
-   
+
       @media (max-width: 1024px) {
-        padding: 0 0.5rem;
+          padding: 0 0.5rem;
       }
-    }
-   
-    &__control-panel {
+  }
+
+  &__control-panel {
       margin-bottom: 2rem;
       background: rgba(31, 41, 55, 0.5);
       backdrop-filter: blur(8px);
       padding: 1rem;
       border-radius: 0.75rem;
       border: 1px solid rgba(75, 85, 99, 0.4);
-   
+      transform-origin: top;
+      animation: slideDown 0.5s ease-out;
+
       @media (max-width: 768px) {
-        margin-bottom: 1rem;
-        padding: 0.75rem;
+          margin-bottom: 1rem;
+          padding: 0.75rem;
       }
-    }
-   
-    &__controls {
+  }
+
+  &__controls {
       display: flex;
       flex-wrap: wrap;
       gap: 1rem;
-   
+
       @media (max-width: 640px) {
-        flex-direction: column;
-        gap: 0.75rem;
+          flex-direction: column;
+          gap: 0.75rem;
       }
-    }
-   
-    &__select {
+  }
+
+  &__select {
       padding: 0.5rem;
       border-radius: 0.5rem;
       background: rgba(55, 65, 81, 0.8);
       color: white;
       border: 1px solid rgba(75, 85, 99, 0.6);
       transition: all 0.2s;
-   
+
       @media (max-width: 640px) {
-        width: 100%;
-        padding: 0.75rem;
+          width: 100%;
+          padding: 0.75rem;
       }
-   
+
       &:hover {
-        border-color: #3b82f6;
+          border-color: #3b82f6;
       }
-   
+
       &:focus {
-        outline: none;
-        box-shadow: 0 0 0 2px #3b82f6;
+          outline: none;
+          box-shadow: 0 0 0 2px #3b82f6;
       }
-    }
-   
-    &__loading {
+  }
+
+  &__loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 400px;
       text-align: center;
       padding: 2rem;
-   
+
       @media (max-width: 768px) {
-        padding: 1rem;
+          padding: 1rem;
       }
-    }
-   
-    &__loading-text {
+  }
+
+  &__loading-text {
       font-size: 1.5rem;
       font-weight: bold;
-      color: #60a5fa;
-   
+      background: linear-gradient(to right, #4f46e5, #7e22ce, #ec4899);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-top: 1rem;
+
       @media (max-width: 768px) {
-        font-size: 1.25rem;
+          font-size: 1.25rem;
       }
-    }
-   
-    &__loading-spinner {
+  }
+
+  &__loading-spinner {
       margin: 1rem auto;
       width: 3rem;
       height: 3rem;
@@ -122,17 +133,56 @@
       border-top-color: #60a5fa;
       border-radius: 50%;
       animation: spin 1s linear infinite;
-   
+
       @media (max-width: 768px) {
-        width: 2.5rem;
-        height: 2.5rem;
-        border-width: 3px;
+          width: 2.5rem;
+          height: 2.5rem;
+          border-width: 3px;
       }
-    }
-   }
-   
-   @keyframes spin {
-    to {
+  }
+
+  &__pokeball-spinner {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 1rem;
+      background: radial-gradient(circle at 50% 50%, 
+          white 0%, white 35%, 
+          red 35%, red 45%, 
+          black 45%, black 55%, 
+          white 55%, white 100%
+      );
+      border-radius: 50%;
+      position: relative;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+
+      &::after {
+          content: '';
+          position: absolute;
+          width: 12px;
+          height: 12px;
+          background: white;
+          border-radius: 50%;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          border: 2px solid black;
+      }
+  }
+}
+
+@keyframes spin {
+  to {
       transform: rotate(360deg);
-    }
-   }
+  }
+}
+
+@keyframes slideDown {
+  from {
+      transform: scaleY(0);
+      opacity: 0;
+  }
+  to {
+      transform: scaleY(1);
+      opacity: 1;
+  }
+}
