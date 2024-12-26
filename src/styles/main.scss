@@ -727,10 +727,10 @@ body {
   display: none;
 }
 
-/* Общи стилове за контейнера */
+
 .infinite-scroll-component {
-  -ms-overflow-style: none;  /* IE и Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  
+  scrollbar-width: none; 
 }
 .type-grass { background-color: #78c850; }
 .type-poison { background-color: #a040a0; }

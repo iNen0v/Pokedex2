@@ -69,7 +69,7 @@ function Battle({ pokemon1, pokemon2, onClose }) {
       <div className="w-full max-w-4xl bg-gray-800 rounded-lg p-8">
         <h2 className="text-2xl text-white text-center mb-8">Battle Preview</h2>
         <div className="flex justify-between items-center mb-8">
-          {/* First Pokemon */}
+        
           <div className="text-center p-4 bg-gray-700 rounded-lg">
             <img 
               src={pokemon1.sprites.front_default}
@@ -91,7 +91,7 @@ function Battle({ pokemon1, pokemon2, onClose }) {
             VS
           </div>
 
-          {/* Second Pokemon */}
+         
           <div className="text-center p-4 bg-gray-700 rounded-lg">
             <img 
               src={pokemon2.sprites.front_default}

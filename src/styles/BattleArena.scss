@@ -33,7 +33,6 @@
   margin-bottom: 2rem;
 }
 
-/* Pokemon Card Styles */
 .battle-arena__pokemon-card {
   flex: 1;
   border-radius: 1rem;
@@ -69,7 +68,7 @@
   margin-bottom: 1rem;
 }
 
-/* HP Section */
+
 .battle-arena__pokemon-card-hp {
   margin-bottom: 1.5rem;
 }
@@ -106,7 +105,7 @@
   background-color: #ef4444;
 }
 
-/* Moves Section */
+
 .battle-arena__pokemon-card-moves {
   display: flex;
   flex-direction: column;
@@ -135,7 +134,7 @@
   cursor: not-allowed;
 }
 
-/* VS Section */
+
 .battle-arena__vs {
   text-align: center;
 }
@@ -161,7 +160,7 @@
   transform: scale(1.05);
 }
 
-/* Battle Log */
+
 .battle-arena__battle-log {
   max-width: 800px;
   margin: 0 auto;
@@ -199,7 +198,7 @@
   background: rgba(75, 85, 99, 0.7);
 }
 
-/* New Game Button */
+
 .battle-arena__new-game {
   margin-top: 2rem;
   padding: 1rem 2rem;
@@ -219,7 +218,7 @@
   transform: scale(1.05);
 }
 
-/* Animations */
+
 @keyframes pulse {
   0%, 100% {
     opacity: 1;

@@ -41,7 +41,7 @@ const BattleSelect = ({ pokemons }) => {
 
   return (
     <div className="p-4">
-      {/* Бутони за действие - показват се само когато има 2 избрани покемона */}
+      
       {selectedPokemons.length === 2 && (
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 flex gap-4 z-50">
           <button

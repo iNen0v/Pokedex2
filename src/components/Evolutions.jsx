@@ -26,7 +26,7 @@ function Evolutions({ pokemonId }) {
   const renderEvolutionChain = (chain) => {
     return (
       <div className="evolution-chain">
-        {/* Current Pokémon */}
+        
         <motion.div
           className="evolution-item"
           whileHover={{ scale: 1.1 }}
@@ -40,7 +40,7 @@ function Evolutions({ pokemonId }) {
           />
           <p>{chain.species.name}</p>
         </motion.div>
-        {/* Recursive rendering for next evolutions */}
+        
         {chain.evolves_to.length > 0 && (
           <>
             <span className="evolution-arrow">→</span>
