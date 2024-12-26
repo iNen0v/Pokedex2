@@ -186,3 +186,11 @@
       opacity: 1;
   }
 }
+.pokemon-home {
+    &__controls {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+  }

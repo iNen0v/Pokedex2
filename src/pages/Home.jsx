@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import PokemonList from '../components/PokemonList';
 import Filters from '../components/Filters';
+import SearchBar from '../components/SearchBar';
 import { fetchPokemons } from '../redux/actions';
 import '../styles/Home.scss';
 
@@ -37,6 +38,7 @@ function Home() {
     minDefense: '',
     showRare: false
   });
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     dispatch(fetchPokemons());
@@ -45,28 +47,34 @@ function Home() {
   const filterAndSortPokemons = () => {
     let filtered = pokemons;
 
- 
+    if (searchQuery) {
+      filtered = filtered.filter(pokemon =>
+        pokemon.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+   
     if (filters.types && filters.types.length > 0) {
       filtered = filtered.filter(pokemon =>
         pokemon.types.some(t => filters.types.includes(t.type.name))
       );
     }
 
-   
+ 
     if (filters.minAttack) {
       filtered = filtered.filter(pokemon =>
         pokemon.stats[1].base_stat >= parseInt(filters.minAttack)
       );
     }
 
-  
+
     if (filters.minDefense) {
       filtered = filtered.filter(pokemon =>
         pokemon.stats[2].base_stat >= parseInt(filters.minDefense)
       );
     }
 
-
+  
     if (filters.showRare) {
       filtered = filtered.filter(pokemon => 
         pokemon.stats.reduce((sum, stat) => sum + stat.base_stat, 0) >= 500
@@ -115,6 +123,12 @@ function Home() {
       >
         <div className="pokemon-home__control-panel">
           <div className="pokemon-home__controls">
+            <SearchBar 
+              pokemons={pokemons} 
+              onSelect={(pokemon) => {
+                console.log(`Selected Pokemon: ${pokemon.name}`);
+              }}
+            />
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
