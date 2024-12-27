@@ -1,0 +1,121 @@
+.pokemon-details {
+    padding: 2rem;
+    min-height: 100vh;
+  
+    .back-button {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      color: #fff;
+      text-decoration: none;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      transition: background 0.3s ease;
+  
+      &:hover {
+        background: rgba(255, 255, 255, 0.3);
+      }
+    }
+  }
+  
+  .detail-card {
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8px);
+    
+    &__header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+  
+    &__title {
+      font-size: 3rem;
+      color: #fff;
+      text-transform: capitalize;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+  
+    &__types {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+  
+    &__body {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+  
+    &__sprites {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+  
+      img {
+        width: 150px;
+        height: 150px;
+        object-fit: contain;
+        filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.2));
+      }
+    }
+  
+    &__info {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+  }
+  
+  .type-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
+    text-transform: capitalize;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .ability-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    margin: 0.25rem;
+    color: white;
+    text-transform: capitalize;
+  
+    small {
+      margin-left: 0.5rem;
+      opacity: 0.8;
+    }
+  }
+  
+  .info-group {
+    margin-bottom: 1.5rem;
+  
+    h3 {
+      color: white;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+  
+    p {
+      color: rgba(255, 255, 255, 0.9);
+      margin: 0.5rem 0;
+    }
+  }
+  
+  .favorite-button {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 2rem;
+    transition: transform 0.2s ease;
+  }

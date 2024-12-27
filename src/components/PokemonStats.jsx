@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import '../styles/PokemonStats.scss';
 
 function PokemonStats({ stats }) {
   const getStatColor = (statValue) => {

@@ -1,0 +1,41 @@
+.stats-display {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    border-radius: 8px;
+  
+    .stat-row {
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+  
+    .stat-name {
+      flex: 1;
+      font-size: 0.9rem;
+      color: white;
+      text-transform: capitalize;
+    }
+  
+    .stat-bar-container {
+      flex: 2;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      height: 12px;
+    }
+  
+    .stat-bar {
+      height: 100%;
+      position: relative;
+      transition: width 0.5s ease;
+  
+      span {
+        position: absolute;
+        right: 4px;
+        color: black;
+        font-size: 0.7rem;
+        font-weight: bold;
+      }
+    }
+  }
