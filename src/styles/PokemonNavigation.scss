@@ -1,0 +1,40 @@
+.pokemon-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin: 2rem 0;
+    gap: 1rem;
+  
+    .nav-button {
+      padding: 1rem 2rem;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: white;
+      text-decoration: none;
+      transition: all 0.3s ease;
+  
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+      }
+  
+      &.prev {
+        padding-left: 3rem;
+        position: relative;
+        &::before {
+          content: "←";
+          position: absolute;
+          left: 1rem;
+        }
+      }
+  
+      &.next {
+        padding-right: 3rem;
+        position: relative;
+        &::after {
+          content: "→";
+          position: absolute;
+          right: 1rem;
+        }
+      }
+    }
+  }

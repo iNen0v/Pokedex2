@@ -10,7 +10,7 @@ $pokemon-white: #FFFFFF;
 .pokemon-details {
  padding: 2rem;
  min-height: 100vh;
- background: rgba($pokemon-black, 0.9);
+ background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
 
  .back-button {
    display: inline-block;
@@ -53,15 +53,36 @@ $pokemon-white: #FFFFFF;
    color: $pokemon-yellow;
    text-transform: capitalize;
    margin-bottom: 1rem;
-   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4),
-                -2px -2px 4px rgba(255, 255, 255, 0.1);
+   text-shadow: 2px 2px 0 #000,
+                -2px 2px 0 #000,
+                2px -2px 0 #000,
+                -2px -2px 0 #000;
    font-weight: bold;
    letter-spacing: 2px;
  }
 
+ &__sprites {
+   display: flex;
+   justify-content: center;
+   gap: 2rem;
+   margin-bottom: 1rem;
+
+   img {
+     width: 200px;
+     height: 200px;
+     object-fit: contain;
+     filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.2));
+     transition: transform 0.3s ease;
+
+     &:hover {
+       transform: scale(1.1);
+     }
+   }
+ }
+
  &__description {
-   background: rgba($pokemon-black, 0.5);
-   padding: 1.5rem;
+   background: rgba(0, 0, 0, 0.4);
+   padding: 1.8rem;
    border-radius: 12px;
    margin: 2rem auto;
    max-width: 800px;
@@ -69,7 +90,7 @@ $pokemon-white: #FFFFFF;
    font-size: 1.1rem;
    line-height: 1.6;
    text-align: center;
-   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
  }
 
  &__info-grid {
@@ -86,7 +107,7 @@ $pokemon-white: #FFFFFF;
    border-radius: 1rem;
    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
  }
-
+ 
  &__body {
    .evolution-chain {
      margin-top: 2rem;
@@ -115,11 +136,12 @@ $pokemon-white: #FFFFFF;
  }
 }
 
-.info-section {
- background: rgba($pokemon-blue, 0.1);
+.info-group {
+ background: rgba(0, 0, 0, 0.2);
+ border: 1px solid rgba(255, 255, 255, 0.1);
  border-radius: 12px;
  padding: 1.5rem;
- backdrop-filter: blur(4px);
+ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
  h3 {
    color: $pokemon-yellow;
@@ -190,9 +212,10 @@ $pokemon-white: #FFFFFF;
      }
 
      img {
-       width: 120px;
-       height: 120px;
+       width: 150px;
+       height: 150px;
        margin-bottom: 0.5rem;
+       filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
      }
 
      .pokemon-name {
@@ -218,32 +241,36 @@ $pokemon-white: #FFFFFF;
 
 .type-badge {
  display: inline-block;
- padding: 0.5rem 1.5rem;
+ padding: 0.8rem 1.8rem;
  border-radius: 20px;
  margin: 0.25rem;
  font-weight: bold;
  text-transform: uppercase;
  letter-spacing: 1px;
  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+ font-size: 1.1rem;
 }
 
 .abilities-list {
  display: flex;
  flex-wrap: wrap;
- gap: 0.5rem;
+ gap: 0.8rem;
  margin-top: 1rem;
 
  .ability-badge {
    background: rgba($pokemon-white, 0.1);
-   padding: 0.5rem 1rem;
+   padding: 0.8rem 1.2rem;
    border-radius: 8px;
    color: $pokemon-white;
    font-size: 0.9rem;
    text-transform: capitalize;
+   margin-right: 0.5rem;
+   margin-bottom: 0.5rem;
 
    small {
      color: $pokemon-yellow;
      margin-left: 0.5rem;
+     opacity: 0.8;
    }
  }
 }
@@ -274,22 +301,49 @@ $pokemon-white: #FFFFFF;
  }
 }
 
-
 @media (max-width: 768px) {
-  .detail-card {
-    &__evolution {
-      padding: 1rem;
-    }
+ .detail-card {
+   &__evolution {
+     padding: 1rem;
+   }
 
-    .evolution-chain {
-      .evolution-stages {
-        flex-direction: column;
-      }
+   .evolution-chain {
+     .evolution-stages {
+       flex-direction: column;
+     }
 
-      .evolution-arrow {
-        transform: rotate(90deg);
-        margin: 1rem 0;
-      }
+     .evolution-arrow {
+       transform: rotate(90deg);
+       margin: 1rem 0;
+     }
+   }
+ }
+}
+.sprite-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .shiny-toggle {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 215, 0, 0.2);
+    border: 1px solid #FFD700;
+    border-radius: 8px;
+    color: #FFD700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(255, 215, 0, 0.3);
     }
   }
+}
+
+.stats-container {
+  margin: 2rem 0;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }

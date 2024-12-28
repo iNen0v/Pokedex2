@@ -1,0 +1,39 @@
+.size-comparison {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2rem 0;
+  
+    &__container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 2rem;
+      min-height: 200px;
+    }
+  
+    .human-silhouette {
+      font-size: 2rem;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .pokemon-height {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      
+      img {
+        max-height: 100%;
+        width: auto;
+      }
+    }
+  
+    .height-label {
+      color: #FFD700;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+  }

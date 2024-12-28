@@ -4,8 +4,9 @@ import { motion } from 'framer-motion';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleFavorite } from '../redux/reducers/favoritesReducer';
-import PokemonStats from './PokemonStats';
-import TypeAdvantages from './TypeAdvantages';
+import StatsRadar from './StatsRadar';
+import SizeComparison from './SizeComparison';
+import PokemonNavigation from './PokemonNavigation';
 import EvolutionChain from './EvolutionChain';
 import '../styles/PokemonDetails.scss';
 
@@ -36,6 +37,7 @@ function PokemonDetails() {
   const dispatch = useDispatch();
   const [pokemon, setPokemon] = useState(null);
   const [pokemonSpecies, setPokemonSpecies] = useState(null);
+  const [showShiny, setShowShiny] = useState(false);
   const favorites = useSelector(state => state.favorites) || [];
   const isFavorite = favorites.includes(Number(id));
 
@@ -46,7 +48,7 @@ function PokemonDetails() {
           axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`),
           axios.get(`https://pokeapi.co/api/v2/pokemon-species/${id}`)
         ]);
-        
+
         setPokemon(pokemonResponse.data);
         setPokemonSpecies(speciesResponse.data);
       } catch (error) {
@@ -72,9 +74,9 @@ function PokemonDetails() {
 
   return (
     <div className="pokemon-details">
-      <Link to="/" className="back-button">
-        ← Back to Pokédex
-      </Link>
+      <Link to="/" className="back-button">← Back to Pokédex</Link>
+
+      <PokemonNavigation currentId={Number(id)} />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -100,26 +102,37 @@ function PokemonDetails() {
         </div>
 
         <div className="detail-card__body">
-          <div className="detail-card__main-info">
-            <div className="detail-card__sprites">
+          <div className="detail-card__sprites">
+            <div className="sprite-container">
               <motion.img 
-                src={pokemon.sprites.front_default} 
+                src={showShiny ? pokemon.sprites.front_shiny : pokemon.sprites.front_default} 
                 alt={pokemon.name}
                 whileHover={{ scale: 1.1 }}
-                transition={{ type: "spring", stiffness: 300 }}
               />
-              <motion.img 
-                src={pokemon.sprites.back_default} 
-                alt={pokemon.name}
-                whileHover={{ scale: 1.1 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              />
-            </div>
-
-            <div className="detail-card__description">
-              <p>{description}</p>
+              <motion.button 
+                className="shiny-toggle"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setShowShiny(!showShiny)}
+              >
+                {showShiny ? "Normal" : "Shiny"}
+              </motion.button>
             </div>
           </div>
+
+          <div className="detail-card__description">
+            <p>{description}</p>
+          </div>
+
+          <div className="stats-container">
+            <StatsRadar stats={pokemon.stats} />
+          </div>
+
+          <SizeComparison 
+            pokemonHeight={pokemon.height} 
+            pokemonName={pokemon.name}
+            pokemonId={id} 
+          />
 
           <div className="detail-card__info-grid">
             <div className="info-group">
@@ -161,7 +174,6 @@ function PokemonDetails() {
             </div>
           </div>
 
-          {/* Добавяме секцията с еволюциите */}
           <div className="detail-card__evolution">
             <EvolutionChain speciesUrl={`https://pokeapi.co/api/v2/pokemon-species/${id}/`} />
           </div>
