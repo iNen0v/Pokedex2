@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import '../styles/PokemonNavigation.scss';
 
 function PokemonNavigation({ currentId }) {
   return (

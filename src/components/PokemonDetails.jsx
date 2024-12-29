@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleFavorite } from '../redux/reducers/favoritesReducer';
@@ -35,11 +35,14 @@ function PokemonDetails() {
   const dispatch = useDispatch();
   const [pokemon, setPokemon] = useState(null);
   const [pokemonSpecies, setPokemonSpecies] = useState(null);
+  const [showShiny, setShowShiny] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const favorites = useSelector(state => state.favorites) || [];
   const isFavorite = favorites.includes(Number(id));
 
   useEffect(() => {
     const fetchPokemonData = async () => {
+      setIsLoading(true);
       try {
         const [pokemonResponse, speciesResponse] = await Promise.all([
           axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`),
@@ -50,17 +53,24 @@ function PokemonDetails() {
         setPokemonSpecies(speciesResponse.data);
       } catch (error) {
         console.error('Error:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchPokemonData();
+    setShowShiny(false); // Reset shiny state on pokemon change
   }, [id]);
 
   const handleFavoriteClick = () => {
     dispatch(toggleFavorite(Number(id)));
   };
 
-  if (!pokemon || !pokemonSpecies) return <div className="loading">Loading...</div>;
+  if (isLoading) {
+    return <div className="loading-skeleton">Loading...</div>;
+  }
+
+  if (!pokemon || !pokemonSpecies) return null;
 
   const mainType = pokemon.types[0].type.name;
   const backgroundColor = typeColors[mainType];
@@ -74,12 +84,14 @@ function PokemonDetails() {
       <Link to="/" className="back-button">
         ← Back to Pokédex
       </Link>
-      
+
       <PokemonNavigation currentId={Number(id)} />
 
       <motion.div
+        key={id}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
         className="detail-card"
         style={{
           background: `linear-gradient(135deg, ${backgroundColor}88 0%, ${backgroundColor}44 100%)`
@@ -89,97 +101,128 @@ function PokemonDetails() {
           <h1 className="detail-card__title">{pokemon.name}</h1>
           <div className="detail-card__types">
             {pokemon.types.map(type => (
-              <span 
+              <motion.span 
                 key={type.type.name} 
                 className="type-badge"
                 style={{ backgroundColor: typeColors[type.type.name] }}
+                whileHover={{ scale: 1.05 }}
               >
                 {type.type.name}
-              </span>
+              </motion.span>
             ))}
           </div>
         </div>
 
-        <div className="detail-card__body">
-          <div className="detail-card__sprites">
+        <div className="detail-card__sprites">
+          <div className="sprite-container">
             <motion.img 
-              src={pokemon.sprites.front_default} 
-              alt={pokemon.name}
+              src={showShiny ? pokemon.sprites.front_shiny : pokemon.sprites.front_default}
+              alt={`${pokemon.name} front`}
               whileHover={{ scale: 1.1 }}
-              transition={{ type: "spring", stiffness: 300 }}
             />
+            <button 
+              className="shiny-toggle"
+              onClick={() => setShowShiny(!showShiny)}
+            >
+              {showShiny ? 'Normal' : 'Shiny'}
+            </button>
+          </div>
+          <div className="sprite-container">
             <motion.img 
-              src={pokemon.sprites.back_default} 
-              alt={pokemon.name}
+              src={showShiny ? pokemon.sprites.back_shiny : pokemon.sprites.back_default}
+              alt={`${pokemon.name} back`}
               whileHover={{ scale: 1.1 }}
-              transition={{ type: "spring", stiffness: 300 }}
             />
-          </div>
-
-          <div className="detail-card__description">
-            <p>{description}</p>
-          </div>
-
-          <div className="detail-card__info-grid">
-            <div className="info-group">
-              <h3>Classification</h3>
-              <p>{pokemonSpecies.genera.find(g => g.language.name === 'en')?.genus}</p>
-              <p><strong>Height:</strong> {pokemon.height / 10}m</p>
-              <p><strong>Weight:</strong> {pokemon.weight / 10}kg</p>
-            </div>
-
-            <div className="info-group">
-              <h3>Training</h3>
-              <p><strong>Base Experience:</strong> {pokemon.base_experience}</p>
-              <p><strong>Base Happiness:</strong> {pokemonSpecies.base_happiness}</p>
-              <p><strong>Catch Rate:</strong> {pokemonSpecies.capture_rate}</p>
-              <p><strong>Growth Rate:</strong> {pokemonSpecies.growth_rate.name}</p>
-            </div>
-
-            <div className="info-group">
-              <h3>Breeding</h3>
-              <p><strong>Egg Groups:</strong> {
-                pokemonSpecies.egg_groups.map(group => group.name).join(', ')
-              }</p>
-              <p><strong>Habitat:</strong> {pokemonSpecies.habitat?.name || 'Unknown'}</p>
-              <p><strong>Generation:</strong> {
-                pokemonSpecies.generation.name.split('-')[1].toUpperCase()
-              }</p>
-            </div>
-
-            <div className="info-group">
-              <h3>Abilities</h3>
-              <div className="abilities-list">
-                {pokemon.abilities.map(ability => (
-                  <span key={ability.ability.name} className="ability-badge">
-                    {ability.ability.name}
-                    {ability.is_hidden && <small>(Hidden)</small>}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <SizeComparison 
-            pokemonHeight={pokemon.height} 
-            pokemonName={pokemon.name}
-            pokemonId={Number(id)}
-          />
-
-          <div className="detail-card__evolution">
-            <EvolutionChain speciesUrl={`https://pokeapi.co/api/v2/pokemon-species/${id}/`} />
           </div>
         </div>
 
+        <motion.div 
+          className="detail-card__description"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          <p>{description}</p>
+        </motion.div>
+
+        <div className="detail-card__info-grid">
+          <motion.div 
+            className="info-group"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <h3>Classification</h3>
+            <p>{pokemonSpecies.genera.find(g => g.language.name === 'en')?.genus}</p>
+            <p><strong>Height:</strong> {pokemon.height / 10}m</p>
+            <p><strong>Weight:</strong> {pokemon.weight / 10}kg</p>
+          </motion.div>
+
+          <motion.div 
+            className="info-group"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            <h3>Training</h3>
+            <p><strong>Base Experience:</strong> {pokemon.base_experience}</p>
+            <p><strong>Base Happiness:</strong> {pokemonSpecies.base_happiness}</p>
+            <p><strong>Catch Rate:</strong> {pokemonSpecies.capture_rate}</p>
+            <p><strong>Growth Rate:</strong> {pokemonSpecies.growth_rate.name}</p>
+          </motion.div>
+
+          <motion.div 
+            className="info-group"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <h3>Breeding</h3>
+            <p><strong>Egg Groups:</strong> {
+              pokemonSpecies.egg_groups.map(group => group.name).join(', ')
+            }</p>
+            <p><strong>Habitat:</strong> {pokemonSpecies.habitat?.name || 'Unknown'}</p>
+            <p><strong>Generation:</strong> {
+              pokemonSpecies.generation.name.split('-')[1].toUpperCase()
+            }</p>
+          </motion.div>
+
+          <motion.div 
+            className="info-group"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+          >
+            <h3>Abilities</h3>
+            <div className="abilities-list">
+              {pokemon.abilities.map(ability => (
+                <span key={ability.ability.name} className="ability-badge">
+                  {ability.ability.name}
+                  {ability.is_hidden && <small>(Hidden)</small>}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+
+        <SizeComparison 
+          pokemonHeight={pokemon.height} 
+          pokemonName={pokemon.name}
+          pokemonId={Number(id)}
+        />
+
+        <div className="detail-card__evolution">
+          <EvolutionChain speciesUrl={`https://pokeapi.co/api/v2/pokemon-species/${id}/`} />
+        </div>
+
         <motion.button
-          className="favorite-button"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          style={{
-            backgroundColor: isFavorite ? '#ff4444' : backgroundColor,
-            color: '#FFF'
-          }}
+          className={`favorite-button ${isFavorite ? 'is-favorite' : ''}`}
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
           onClick={handleFavoriteClick}
+          style={{
+            backgroundColor: isFavorite ? '#ff4444' : backgroundColor
+          }}
         >
           {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
         </motion.button>
