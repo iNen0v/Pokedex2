@@ -319,31 +319,3 @@ $pokemon-white: #FFFFFF;
    }
  }
 }
-.sprite-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  .shiny-toggle {
-    margin-top: 1rem;
-    padding: 0.5rem 1rem;
-    background: rgba(255, 215, 0, 0.2);
-    border: 1px solid #FFD700;
-    border-radius: 8px;
-    color: #FFD700;
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    &:hover {
-      background: rgba(255, 215, 0, 0.3);
-    }
-  }
-}
-
-.stats-container {
-  margin: 2rem 0;
-  padding: 1rem;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
