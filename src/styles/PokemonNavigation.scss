@@ -1,40 +1,41 @@
+@use "sass:color";
+
+$pokemon-yellow: #FFDE00;
+
 .pokemon-navigation {
-    display: flex;
-    justify-content: space-between;
-    margin: 2rem 0;
-    gap: 1rem;
-  
-    .nav-button {
-      padding: 1rem 2rem;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      color: white;
-      text-decoration: none;
-      transition: all 0.3s ease;
-  
-      &:hover {
-        background: rgba(255, 255, 255, 0.2);
-        transform: translateY(-2px);
-      }
-  
-      &.prev {
-        padding-left: 3rem;
-        position: relative;
-        &::before {
-          content: "←";
-          position: absolute;
-          left: 1rem;
-        }
-      }
-  
-      &.next {
-        padding-right: 3rem;
-        position: relative;
-        &::after {
-          content: "→";
-          position: absolute;
-          right: 1rem;
-        }
-      }
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 2rem 0;
+
+  .nav-button {
+    padding: 0.8rem 2rem;
+    background: $pokemon-yellow;
+    border-radius: 8px;
+    color: #000;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    min-width: 150px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+    &.prev::before {
+      content: "←";
+      margin-right: 0.5rem;
+    }
+
+    &.next::after {
+      content: "→";
+      margin-left: 0.5rem;
+    }
+
+    &:hover {
+      background: color.adjust($pokemon-yellow, $lightness: -10%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
     }
   }
+}

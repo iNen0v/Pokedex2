@@ -1,34 +1,35 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import '../styles/PokemonNavigation.scss';
 
 function PokemonNavigation({ currentId }) {
+  const navigate = useNavigate();
+
   return (
     <div className="pokemon-navigation">
       {currentId > 1 && (
-        <motion.div
-          whileHover={{ x: -5 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Link 
-            to={`/pokemon/${currentId - 1}`} 
-            className="nav-button prev"
-          >
-            ← Previous
-          </Link>
-        </motion.div>
-      )}
-      <motion.div
-        whileHover={{ x: 5 }}
-        whileTap={{ scale: 0.95 }}
-      >
         <Link 
-          to={`/pokemon/${currentId + 1}`} 
-          className="nav-button next"
+          to={`/pokemon/${currentId - 1}`} 
+          className="nav-button prev"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(`/pokemon/${currentId - 1}`);
+          }}
         >
-          Next →
+          Previous
         </Link>
-      </motion.div>
+      )}
+      <Link 
+        to={`/pokemon/${currentId + 1}`} 
+        className="nav-button next"
+        onClick={(e) => {
+          e.preventDefault();
+          navigate(`/pokemon/${currentId + 1}`);
+        }}
+      >
+        Next
+      </Link>
     </div>
   );
 }

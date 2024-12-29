@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import BattleList from '../components/BattleList';
+import '../styles/BattlePage.scss';
+
+const pokemonTypes = [
+  'normal', 'fire', 'water', 'electric', 'grass', 'ice',
+  'fighting', 'poison', 'ground', 'flying', 'psychic', 'bug',
+  'rock', 'ghost', 'dragon', 'dark', 'steel', 'fairy'
+];
 
 function BattlePage() {
   const navigate = useNavigate();
@@ -9,6 +17,7 @@ function BattlePage() {
   const [opponent, setOpponent] = useState(null);
   const { data: pokemons, loading } = useSelector(state => state.pokemons);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedTypes, setSelectedTypes] = useState([]);
 
   const handlePokemonSelect = (pokemon) => {
     if (!selectedPokemon) {
@@ -27,71 +36,134 @@ function BattlePage() {
   const handleCancelSelection = () => {
     setSelectedPokemon(null);
     setOpponent(null);
+    setSelectedTypes([]);
   };
 
-  const filteredPokemons = pokemons?.filter(pokemon => 
-    pokemon.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const toggleTypeFilter = (type) => {
+    setSelectedTypes(prev => 
+      prev.includes(type) 
+        ? prev.filter(t => t !== type)
+        : [...prev, type]
+    );
+  };
+
+  const filteredPokemons = pokemons?.filter(pokemon => {
+    const matchesSearch = pokemon.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesType = selectedTypes.length === 0 || 
+      pokemon.types.some(t => selectedTypes.includes(t.type.name));
+    return matchesSearch && matchesType;
+  });
 
   return (
-    <div className="min-h-screen bg-black">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex justify-between items-center mb-6">
-          <button
+    <div className="battle-page">
+      <motion.div 
+        className="battle-page__content"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
+        <div className="battle-page__header">
+          <motion.button
+            className="back-button"
             onClick={() => navigate('/')}
-            className="text-white hover:text-gray-300"
+            whileHover={{ x: -5 }}
           >
-            ← Back
-          </button>
-          
-          <input
-            type="text"
-            placeholder="Search Pokemon..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="bg-transparent border-b border-gray-700 text-white px-2 py-1"
-          />
+            ← Back to Pokédex
+          </motion.button>
         </div>
 
-        {selectedPokemon && !opponent && (
-          <div className="text-white mb-4 text-center text-xl">
-            Selected: <span className="font-bold capitalize">{selectedPokemon.name}</span> - Choose your opponent
-          </div>
-        )}
+        <div className="search-section">
+          <motion.div 
+            className="search-container"
+            initial={{ y: -20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+          >
+            <input
+              type="text"
+              placeholder="Search for your next champion..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pokemon-search"
+            />
+          </motion.div>
+
+          <motion.div 
+            className="type-filters"
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+          >
+            {pokemonTypes.map(type => (
+              <motion.button 
+                key={type}
+                data-type={type}
+                className={`type-filter ${selectedTypes.includes(type) ? 'active' : ''}`}
+                onClick={() => toggleTypeFilter(type)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {type}
+              </motion.button>
+            ))}
+          </motion.div>
+        </div>
+
+        <AnimatePresence mode="wait">
+          {selectedPokemon && !opponent && (
+            <motion.div 
+              className="selection-status"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+            >
+              <span className="status-text">
+                <span className="selected-name">{selectedPokemon.name}</span> is ready!
+                Choose your opponent
+              </span>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {selectedPokemon && opponent && (
-          <div className="fixed top-4 left-1/2 transform -translate-x-1/2 flex gap-6 z-50">
-            <button
+          <motion.div 
+            className="battle-controls"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <motion.button
+              className="battle-button start"
               onClick={handleStartBattle}
-              className="px-8 py-3 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-lg 
-                hover:from-red-500 hover:to-red-400 transition-all duration-300 
-                shadow-lg hover:shadow-red-500/50 font-bold text-lg
-                transform hover:scale-105 active:scale-95"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               ⚔️ Start Battle!
-            </button>
-            <button
+            </motion.button>
+            <motion.button
+              className="battle-button cancel"
               onClick={handleCancelSelection}
-              className="px-8 py-3 bg-gradient-to-r from-gray-700 to-gray-600 text-white rounded-lg 
-                hover:from-gray-600 hover:to-gray-500 transition-all duration-300
-                shadow-lg hover:shadow-gray-500/50 font-bold text-lg
-                transform hover:scale-105 active:scale-95"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               ✖️ Cancel
-            </button>
-          </div>
+            </motion.button>
+          </motion.div>
         )}
 
         {loading ? (
-          <div className="text-white">Loading...</div>
+          <motion.div 
+            className="loading"
+            animate={{ opacity: [0.5, 1, 0.5] }}
+            transition={{ repeat: Infinity, duration: 1.5 }}
+          >
+            Loading champions...
+          </motion.div>
         ) : (
           <BattleList
             pokemons={filteredPokemons}
             onPokemonSelect={handlePokemonSelect}
             selectedPokemonId={selectedPokemon?.id}
+            opponentId={opponent?.id}
           />
         )}
-      </div>
+      </motion.div>
     </div>
   );
 }
