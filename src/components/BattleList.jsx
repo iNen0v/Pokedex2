@@ -1,15 +1,9 @@
-// BattleList.jsx
 import React from 'react';
 import { motion } from 'framer-motion';
 import BattleCard from './BattleCard';
 import '../styles/BattleList.scss';
 
-function BattleList({ pokemons, onPokemonSelect, selectedPokemonId, opponentId }) {
-  const containerStyle = {
-    width: '100%',
-    padding: '20px'
-  };
-
+function BattleList({ pokemons, onPokemonSelect, selectedPokemonId }) {
   const listStyle = {
     display: 'flex',
     flexWrap: 'wrap',
@@ -23,50 +17,34 @@ function BattleList({ pokemons, onPokemonSelect, selectedPokemonId, opponentId }
   };
 
   const handlePokemonClick = (pokemon) => {
-    console.log('Pokemon clicked:', pokemon);
     onPokemonSelect(pokemon);
   };
 
   return (
-    <div style={containerStyle} className="battle-container">
-      <div style={listStyle}>
-        {pokemons?.map((pokemon, index) => (
-          <motion.div
-            key={pokemon.id}
-            style={cardStyle}
-            initial={{ opacity: 0 }}
-            animate={{ 
-              opacity: 1,
-              scale: selectedPokemonId === pokemon.id || opponentId === pokemon.id ? 1.02 : 1,
-              boxShadow: selectedPokemonId === pokemon.id 
-                ? '0 0 20px rgba(255, 215, 0, 0.5)'
-                : opponentId === pokemon.id 
-                ? '0 0 20px rgba(255, 215, 0, 0.3)'
-                : 'none'
-            }}
-            transition={{ 
-              duration: 0.3, 
-              delay: index * 0.05 
-            }}
-            onClick={() => handlePokemonClick(pokemon)}
-            className={`battle-card-wrapper ${
-              selectedPokemonId === pokemon.id 
-                ? 'selected' 
-                : opponentId === pokemon.id 
-                ? 'opponent'
-                : ''
-            }`}
-            whileHover={{ 
-              scale: selectedPokemonId === pokemon.id || opponentId === pokemon.id ? 1.02 : 1.05,
-              transition: { duration: 0.2 }
-            }}
-          >
-            <BattleCard
-              pokemon={pokemon}
-              isSelected={selectedPokemonId === pokemon.id || opponentId === pokemon.id}
-            />
-          </motion.div>
-        ))}
+    <div className="battle-container">
+      <div className="decorative-line" />
+      <div className="battle-title">Battle Arena</div>
+      <div className="content">
+        <div className="control-panel">
+          <div style={listStyle}>
+            {pokemons?.map((pokemon, index) => (
+              <motion.div
+                key={pokemon.id}
+                style={cardStyle}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+                onClick={() => handlePokemonClick(pokemon)}
+                className={`${selectedPokemonId === pokemon.id ? 'selected' : ''}`}
+              >
+                <BattleCard
+                  pokemon={pokemon}
+                  isSelected={selectedPokemonId === pokemon.id}
+                />
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
