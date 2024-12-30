@@ -1,6 +1,17 @@
 .battle-arena {
   min-height: 100vh;
-  background: linear-gradient(to bottom, #1a1a2e, #16213e, #1a1a2e);
+  background: linear-gradient(to right, #6366f1, #4f46e5);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.battle-arena__background-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: url('/pokeball-pattern.png');
+  opacity: 0.05;
+  pointer-events: none;
 }
 
 .battle-arena__header {
@@ -19,10 +30,10 @@
   font-weight: bold;
   text-align: center;
   margin-bottom: 3rem;
-  background: linear-gradient(to right, #60a5fa, #a78bfa);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #FFDE00;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
 .battle-arena__battle-container {
@@ -37,14 +48,15 @@
   flex: 1;
   border-radius: 1rem;
   padding: 1.5rem;
-  background: rgba(17, 24, 39, 0.7);
+  background: rgba(99, 102, 241, 0.3);
   backdrop-filter: blur(8px);
   border: 1px solid rgba(75, 85, 99, 0.4);
   transition: all 0.3s;
 }
 
 .battle-arena__pokemon-card--active {
-  border: 2px solid #fbbf24;
+  border: 2px solid #FFDE00;
+  box-shadow: 0 0 15px rgba(255, 222, 0, 0.3);
   animation: pulse 2s infinite;
 }
 
@@ -68,7 +80,6 @@
   margin-bottom: 1rem;
 }
 
-
 .battle-arena__pokemon-card-hp {
   margin-bottom: 1.5rem;
 }
@@ -83,7 +94,7 @@
 
 .battle-arena__pokemon-card-hp-bar {
   height: 1rem;
-  background: #374151;
+  background: rgba(30, 41, 90, 0.4);
   border-radius: 0.5rem;
   overflow: hidden;
 }
@@ -104,7 +115,6 @@
 .battle-arena__pokemon-card-hp-bar-fill--low {
   background-color: #ef4444;
 }
-
 
 .battle-arena__pokemon-card-moves {
   display: flex;
@@ -130,10 +140,9 @@
 }
 
 .battle-arena__pokemon-card-moves-button--disabled {
-  background: #374151;
+  background: rgba(99, 102, 241, 0.3);
   cursor: not-allowed;
 }
-
 
 .battle-arena__vs {
   text-align: center;
@@ -149,24 +158,23 @@
 
 .battle-arena__vs-button {
   padding: 0.75rem 1.5rem;
-  background: #374151;
+  background: rgba(30, 41, 90, 0.4);
   color: white;
   border-radius: 0.5rem;
   transition: all 0.2s;
 }
 
 .battle-arena__vs-button:hover {
-  background: #4b5563;
+  background: rgba(75, 85, 99, 0.7);
   transform: scale(1.05);
 }
-
 
 .battle-arena__battle-log {
   max-width: 800px;
   margin: 0 auto;
   border-radius: 1rem;
   padding: 1.5rem;
-  background: rgba(17, 24, 39, 0.7);
+  background: rgba(99, 102, 241, 0.3);
   backdrop-filter: blur(8px);
   border: 1px solid rgba(75, 85, 99, 0.4);
 }
@@ -190,14 +198,13 @@
   padding: 0.5rem 1rem;
   color: #d1d5db;
   border-radius: 0.5rem;
-  background: rgba(55, 65, 81, 0.5);
+  background: rgba(99, 102, 241, 0.3);
   transition: background 0.3s;
 }
 
 .battle-arena__battle-log-entry:hover {
   background: rgba(75, 85, 99, 0.7);
 }
-
 
 .battle-arena__new-game {
   margin-top: 2rem;
@@ -217,7 +224,6 @@
   background: linear-gradient(to right, #10b981, #34d399);
   transform: scale(1.05);
 }
-
 
 @keyframes pulse {
   0%, 100% {

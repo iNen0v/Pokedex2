@@ -16,14 +16,12 @@ function BattleList({ pokemons, onPokemonSelect, selectedPokemonId }) {
     width: '300px'
   };
 
-  const handlePokemonClick = (pokemon) => {
-    onPokemonSelect(pokemon);
-  };
-
   return (
     <div className="battle-container">
-      <div className="decorative-line" />
+      <div className="battle-container__background-pattern" />
+      <div className="battle-container__decorative-line" />
       <div className="battle-title">Battle Arena</div>
+      
       <div className="content">
         <div className="control-panel">
           <div style={listStyle}>
@@ -34,7 +32,7 @@ function BattleList({ pokemons, onPokemonSelect, selectedPokemonId }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3, delay: index * 0.05 }}
-                onClick={() => handlePokemonClick(pokemon)}
+                onClick={() => onPokemonSelect(pokemon)}
                 className={`${selectedPokemonId === pokemon.id ? 'selected' : ''}`}
               >
                 <BattleCard

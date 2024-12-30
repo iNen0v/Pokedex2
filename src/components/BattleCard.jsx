@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import '../styles/BattleCard.scss';
+import '../styles/BattleList.scss';
 
 function BattleCard({ pokemon, isSelected }) {
   if (!pokemon) return null;
@@ -8,89 +8,101 @@ function BattleCard({ pokemon, isSelected }) {
   return (
     <motion.div
       className={`battle-card ${isSelected ? 'selected' : ''}`}
-      whileHover={{ y: -5 }}
+      whileHover={{ scale: 1.02 }}
     >
-      <div className="pokemon-id">
-        #{String(pokemon.id).padStart(4, '0')}
+      <div className="pokemon-header">
+        <span className="pokemon-id">
+          #{String(pokemon.id).padStart(4, '0')}
+        </span>
+        <span>{pokemon.types?.[0]?.type?.name}</span>
       </div>
 
-      <div className="text-gray-400">
-        {pokemon.types?.[0]?.type?.name}
+      <div className="pokemon-image-container">
+        <img
+          src={pokemon.sprites?.front_default}
+          alt={pokemon.name}
+          className="pokemon-image"
+        />
       </div>
 
-      <img
-        src={pokemon.sprites?.front_default}
-        alt={pokemon.name}
-        className="pokemon-image w-32 h-32 mx-auto"
-      />
+      <h3 className="pokemon-name">{pokemon.name}</h3>
 
-      <h3 className="pokemon-name text-xl capitalize">{pokemon.name}</h3>
-
-      <div className="stats space-y-1 text-sm">
+      <div className="stats-container">
         {[
-          ['hp', pokemon.stats?.[0]?.base_stat],
-          ['attack', pokemon.stats?.[1]?.base_stat],
-          ['defense', pokemon.stats?.[2]?.base_stat],
-          ['sp-atk', pokemon.stats?.[3]?.base_stat],
-          ['sp-def', pokemon.stats?.[4]?.base_stat],
-          ['speed', pokemon.stats?.[5]?.base_stat]
+          ['HP', pokemon.stats?.[0]?.base_stat],
+          ['Attack', pokemon.stats?.[1]?.base_stat],
+          ['Defense', pokemon.stats?.[2]?.base_stat],
+          ['Sp.Atk', pokemon.stats?.[3]?.base_stat],
+          ['Sp.Def', pokemon.stats?.[4]?.base_stat],
+          ['Speed', pokemon.stats?.[5]?.base_stat]
         ].map(([stat, value]) => (
           <div key={stat} className="stat-row">
-            <span className="stat-name text-gray-400">{stat}:</span>
+            <span className="stat-name">{stat}</span>
             <span className="stat-value">{value}</span>
           </div>
         ))}
       </div>
 
-      <div className="damage-section weak">
-        <div className="section-title">Weak Against (2x damage):</div>
-        <div className="type-list">
-          {pokemon.types?.[0]?.weakTo?.map(type => (
-            <span key={type} className={`type type-${type}`}>
-              {type}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      <div className="damage-section strong">
-        <div className="section-title">Strong Against (½ damage):</div>
-        <div className="type-list">
-          {pokemon.types?.[0]?.strongAgainst?.map(type => (
-            <span key={type} className={`type type-${type}`}>
-              {type}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      <div className="damage-section resistant">
-        <div className="section-title">Resistant To (½ damage):</div>
-        <div className="type-list">
-          {pokemon.types?.[0]?.resistantTo?.length > 0 ? (
-            pokemon.types[0].resistantTo.map(type => (
-              <span key={type} className={`type type-${type}`}>
+      <div className="battle-info">
+        <div className="section">
+          <div className="section-title">Weak Against:</div>
+          <div className="type-list">
+            {pokemon.types?.[0]?.weakTo?.map(type => (
+              <span key={type} className={`type-badge`} style={{ backgroundColor: getBadgeColor(type) }}>
                 {type}
               </span>
-            ))
-          ) : (
-            <span className="no-resistances">No resistances</span>
-          )}
+            ))}
+          </div>
         </div>
-      </div>
 
-      <div className="battle-moves">
-        <div className="moves-title">Battle Moves:</div>
-        <div className="move-list">
-          {pokemon.moves?.slice(0, 4).map(move => (
-            <span key={move.move.name} className="move">
-              {move.move.name.replace('-', ' ')}
-            </span>
-          ))}
+        <div className="section">
+          <div className="section-title">Strong Against:</div>
+          <div className="type-list">
+            {pokemon.types?.[0]?.strongAgainst?.map(type => (
+              <span key={type} className={`type-badge`} style={{ backgroundColor: getBadgeColor(type) }}>
+                {type}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="section">
+          <div className="section-title">Resistant To:</div>
+          <div className="type-list">
+            {pokemon.types?.[0]?.resistantTo?.map(type => (
+              <span key={type} className={`type-badge`} style={{ backgroundColor: getBadgeColor(type) }}>
+                {type}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </motion.div>
   );
 }
+
+const getBadgeColor = (type) => {
+  const colors = {
+    normal: '#A8A878',
+    fire: '#F08030',
+    water: '#6890F0',
+    electric: '#F8D030',
+    grass: '#78C850',
+    ice: '#98D8D8',
+    fighting: '#C03028',
+    poison: '#A040A0',
+    ground: '#E0C068',
+    flying: '#A890F0',
+    psychic: '#F85888',
+    bug: '#A8B820',
+    rock: '#B8A038',
+    ghost: '#705898',
+    dragon: '#7038F8',
+    dark: '#705848',
+    steel: '#B8B8D0',
+    fairy: '#EE99AC'
+  };
+  return colors[type] || '#777';
+};
 
 export default BattleCard;

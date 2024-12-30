@@ -1,15 +1,66 @@
+.battle-container {
+  min-height: 100vh;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+
+  &__background-pattern {
+    position: absolute;
+    inset: 0;
+    background-image: url('/pokeball-pattern.png');
+    opacity: 0.05;
+    pointer-events: none;
+  }
+
+  &__decorative-line {
+    height: 0.5rem;
+    background: linear-gradient(to right, #4f46e5, #7e22ce, #ec4899);
+  }
+
+  .battle-title {
+    color: #FFDE00;
+    font-size: 2.5rem;
+    text-align: center;
+    margin: 2rem 0;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    position: relative;
+    z-index: 10;
+  }
+
+  .control-panel {
+    margin-bottom: 2rem;
+    background: rgba(30, 41, 90, 0.4);
+    backdrop-filter: blur(8px);
+    padding: 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(75, 85, 99, 0.4);
+    transform-origin: top;
+    animation: slideDown 0.5s ease-out;
+  }
+}
+
 .battle-card {
-  background: white;
+  background: rgba(30, 41, 90, 0.4);
+  backdrop-filter: blur(8px);
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease;
-  border: 2px solid transparent;
+  color: white;
 
   &.selected {
-    border-color: #4a90e2;
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(74, 144, 226, 0.2);
+    border-color: #FFDE00;
+    box-shadow: 0 0 15px rgba(255, 222, 0, 0.3);
   }
 
   .pokemon-header {
@@ -17,16 +68,11 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
+  }
 
-    .pokemon-id {
-      font-size: 0.9rem;
-      color: #666;
-    }
-
-    .pokemon-types {
-      display: flex;
-      gap: 0.5rem;
-    }
+  .pokemon-id {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
   }
 
   .pokemon-image-container {
@@ -34,7 +80,7 @@
     justify-content: center;
     padding: 1rem;
     margin: 1rem 0;
-    background: #f8f9fa;
+    background: rgba(30, 41, 90, 0.4);
     border-radius: 8px;
 
     .pokemon-image {
@@ -47,27 +93,30 @@
   .pokemon-name {
     text-align: center;
     font-size: 1.4rem;
-    color: #333;
+    color: white;
     text-transform: capitalize;
     margin-bottom: 1rem;
   }
 
   .stats-container {
     margin: 1rem 0;
+    background: rgba(30, 41, 90, 0.4);
+    border-radius: 8px;
+    padding: 1rem;
 
     .stat-row {
       display: flex;
       justify-content: space-between;
       padding: 0.5rem;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
-      .stat-label {
-        color: #666;
+      .stat-name {
+        color: rgba(255, 255, 255, 0.6);
       }
 
       .stat-value {
+        color: white;
         font-weight: bold;
-        color: #333;
       }
     }
   }
@@ -76,20 +125,13 @@
     .section {
       margin-top: 1rem;
       padding: 0.8rem;
-      background: #f8f9fa;
+      background: rgba(30, 41, 90, 0.4);
       border-radius: 8px;
 
       .section-title {
         font-weight: bold;
         margin-bottom: 0.5rem;
-      }
-
-      &.weak .section-title {
-        color: #dc2626;
-      }
-
-      &.strong .section-title {
-        color: #16a34a;
+        color: #FFDE00;
       }
     }
 
@@ -109,15 +151,36 @@
   }
 }
 
+@keyframes slideDown {
+  from {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  to {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
 @media (max-width: 768px) {
+  .battle-container {
+    .content {
+      padding: 1rem;
+    }
+    .control-panel {
+      padding: 0.75rem;
+    }
+    .battle-title {
+      font-size: 2rem;
+      margin: 1.5rem 0;
+    }
+  }
+
   .battle-card {
     padding: 1rem;
-
-    .pokemon-image-container {
-      .pokemon-image {
-        width: 100px;
-        height: 100px;
-      }
+    .pokemon-image-container .pokemon-image {
+      width: 100px;
+      height: 100px;
     }
   }
 }
