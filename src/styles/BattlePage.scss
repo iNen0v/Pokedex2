@@ -1,175 +1,127 @@
 .battle-page {
-    min-height: 100vh;
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7));
-    padding: 2rem;
-  
-    &__content {
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-  
-    &__header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-  
-      .back-button {
-        padding: 0.8rem 1.5rem;
-        background: rgba(255, 255, 255, 0.1);
-        border: none;
-        border-radius: 8px;
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.3s ease;
-  
-        &:hover {
-          background: rgba(255, 255, 255, 0.2);
-        }
-      }
-    }
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+  min-height: 100vh;
+  color: white;
+  position: relative;
+  overflow: hidden;
+
+  &__background-pattern {
+    position: absolute;
+    inset: 0;
+    background-image: url('/pokeball-pattern.png');
+    opacity: 0.05;
+    pointer-events: none;
   }
-  
+
+  &__decorative-line {
+    height: 0.5rem;
+    background: linear-gradient(to right, #4f46e5, #7e22ce, #ec4899);
+  }
+
   .search-section {
-    margin-bottom: 3rem;
-  
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem;
+    
     .search-container {
-      margin-bottom: 1.5rem;
-    }
-  
-    .pokemon-search {
       width: 100%;
-      padding: 1.2rem 2rem;
-      font-size: 1.2rem;
-      border-radius: 50px;
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      background: rgba(0, 0, 0, 0.5);
-      color: white;
-      transition: all 0.3s ease;
-  
-      &:focus {
-        border-color: #FFD700;
-        box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
-        outline: none;
-      }
-    }
-  
-    .type-filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.8rem;
-      margin-top: 1rem;
-      justify-content: center;
-  
-      .type-filter {
-        padding: 0.6rem 1.2rem;
-        border-radius: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+      
+      input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border-radius: 9999px;
+        background: rgba(31, 41, 55, 0.5);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(75, 85, 99, 0.4);
         color: white;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-transform: capitalize;
-        min-width: 100px;
-        text-align: center;
-        font-weight: bold;
-  
-        &[data-type="normal"] { background: #A8A878; }
-        &[data-type="fire"] { background: #f03030; }
-        &[data-type="water"] { background: #6890F0; }
-        &[data-type="grass"] { background: #78C850; }
-        &[data-type="electric"] { background: #F8D030; }
-        &[data-type="ice"] { background: #98D8D8; }
-        &[data-type="fighting"] { background: #c06028; }
-        &[data-type="poison"] { background: #A040A0; }
-        &[data-type="ground"] { background: #E0C068; }
-        &[data-type="flying"] { background: #A890F0; }
-        &[data-type="psychic"] { background: #F85888; }
-        &[data-type="bug"] { background: #A8B820; }
-        &[data-type="rock"] { background: #B8A038; }
-        &[data-type="ghost"] { background: #705898; }
-        &[data-type="dark"] { background: #705848; }
-        &[data-type="dragon"] { background: #7038F8; }
-        &[data-type="steel"] { background: #B8B8D0; }
-        &[data-type="fairy"] { background: #F0B6BC; }
-  
-        &:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-          opacity: 0.9;
+        font-size: 1rem;
+        
+        &::placeholder {
+          color: rgba(255, 255, 255, 0.6);
         }
-  
-        &.active {
-          transform: translateY(1px);
-          box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-          opacity: 1;
+
+        &:focus {
+          outline: none;
+          border-color: #FFDE00;
+          box-shadow: 0 0 15px rgba(255, 222, 0, 0.3);
         }
       }
     }
   }
-  
-  .selection-status {
-    text-align: center;
-    margin-bottom: 2rem;
-    color: white;
-    font-size: 1.2rem;
-  
-    .selected-name {
-      color: #FFD700;
-      font-weight: bold;
-      text-transform: capitalize;
-    }
-  }
-  
-  .battle-controls {
+
+  .type-filters {
     display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
     justify-content: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
-  
-    .battle-button {
-      padding: 1rem 2rem;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
+    padding: 1rem;
+    margin: 0 auto;
+    max-width: 800px;
+
+    button {
+      padding: 0.5rem 1.5rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 0.875rem;
       cursor: pointer;
-      transition: all 0.3s ease;
-  
-      &.start {
-        background: linear-gradient(to right, #FF0000, #CC0000);
-        color: white;
-  
-        &:hover {
-          background: linear-gradient(to right, #FF1A1A, #E60000);
-          box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
-        }
+      transition: all 0.2s;
+      text-transform: capitalize;
+
+      &:hover {
+        transform: scale(1.05);
       }
-  
-      &.cancel {
-        background: rgba(255, 255, 255, 0.1);
-        color: white;
-  
+
+      &.normal { background-color: #A8A878; }
+      &.fire { background-color: #F08030; }
+      &.water { background-color: #6890F0; }
+      &.grass { background-color: #78C850; }
+      &.electric { background-color: #F8D030; }
+      &.ice { background-color: #98D8D8; }
+      &.fighting { background-color: #C03028; }
+      &.poison { background-color: #A040A0; }
+      &.ground { background-color: #E0C068; }
+      &.flying { background-color: #A890F0; }
+      &.psychic { background-color: #F85888; }
+      &.bug { background-color: #A8B820; }
+      &.rock { background-color: #B8A038; }
+      &.ghost { background-color: #705898; }
+      &.dragon { background-color: #7038F8; }
+      &.dark { background-color: #705848; }
+      &.steel { background-color: #B8B8D0; }
+      &.fairy { background-color: #EE99AC; }
+
+      &.active {
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        border-color: white;
+      }
+
+      &.clear-filter {
+        background: rgba(31, 41, 55, 0.5);
+        backdrop-filter: blur(8px);
+        
         &:hover {
-          background: rgba(255, 255, 255, 0.2);
+          background: rgba(75, 85, 99, 0.7);
         }
       }
     }
   }
-  
-  .loading {
-    text-align: center;
+
+  .back-button {
+    margin: 1rem;
+    padding: 0.5rem 1rem;
+    background: rgba(31, 41, 55, 0.5);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(75, 85, 99, 0.4);
+    border-radius: 0.5rem;
     color: white;
-    font-size: 1.2rem;
-    padding: 2rem;
-  }
-  
-  @media (max-width: 768px) {
-    .battle-page {
-      padding: 1rem;
-    }
-  
-    .battle-controls {
-      flex-direction: column;
-      align-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background: rgba(75, 85, 99, 0.7);
+      transform: scale(1.05);
     }
   }
+}
