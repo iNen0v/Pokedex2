@@ -1,3 +1,125 @@
+/* Стар стил */
+.clear-filters-btn {
+  padding: 0.5rem 1rem;
+  background: rgba(239, 68, 68, 0.5);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-radius: 0.5rem;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.875rem;
+
+  &:hover {
+    background: rgba(239, 68, 68, 0.7);
+  }
+}
+
+// Подобряваме стила на stats-filters за бутона
+.stats-filters {
+  max-width: 800px;
+  margin: 1rem auto;
+  padding: 1rem;
+  background: rgba(31, 41, 55, 0.5);
+  backdrop-filter: blur(8px);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(75, 85, 99, 0.4);
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+
+  .filter-container {
+    flex: 1;
+
+    label {
+      display: block;
+      color: white;
+      margin-bottom: 0.5rem;
+    }
+
+    .slider {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      appearance: none;
+      outline: none;
+
+      &::-webkit-slider-thumb {
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        background: #FFDE00;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover {
+          transform: scale(1.2);
+        }
+      }
+    }
+  }
+}
+
+.type-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  padding: 1rem;
+  margin: 0 auto;
+  max-width: 800px;
+
+  button {
+    padding: 0.5rem 1.5rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: capitalize;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    &.normal { background-color: #A8A878; }
+    &.fire { background-color: #f03030; }
+    &.water { background-color: #6890F0; }
+    &.grass { background-color: #78C850; }
+    &.electric { background-color: #F8D030; }
+    &.ice { background-color: #98D8D8; }
+    &.fighting { background-color: #c07128; }
+    &.poison { background-color: #A040A0; }
+    &.ground { background-color: #E0C068; }
+    &.flying { background-color: #A890F0; }
+    &.psychic { background-color: #F85888; }
+    &.bug { background-color: #A8B820; }
+    &.rock { background-color: #B8A038; }
+    &.ghost { background-color: #705898; }
+    &.dragon { background-color: #7038F8; }
+    &.dark { background-color: #705848; }
+    &.steel { background-color: #B8B8D0; }
+    &.fairy { background-color: #EE99AC; }
+
+    &.active {
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      border-color: white;
+    }
+
+    &.clear-filter {
+      background: rgba(31, 41, 55, 0.5);
+      backdrop-filter: blur(8px);
+
+      &:hover {
+        background: rgba(75, 85, 99, 0.7);
+      }
+    }
+  }
+}
+
 .battle-page {
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
   min-height: 100vh;
@@ -23,10 +145,10 @@
     max-width: 800px;
     margin: 0 auto;
     padding: 1rem;
-    
+
     .search-container {
       width: 100%;
-      
+
       input {
         width: 100%;
         padding: 0.75rem 1rem;
@@ -36,7 +158,7 @@
         border: 1px solid rgba(75, 85, 99, 0.4);
         color: white;
         font-size: 1rem;
-        
+
         &::placeholder {
           color: rgba(255, 255, 255, 0.6);
         }
@@ -45,64 +167,6 @@
           outline: none;
           border-color: #FFDE00;
           box-shadow: 0 0 15px rgba(255, 222, 0, 0.3);
-        }
-      }
-    }
-  }
-
-  .type-filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    justify-content: center;
-    padding: 1rem;
-    margin: 0 auto;
-    max-width: 800px;
-
-    button {
-      padding: 0.5rem 1.5rem;
-      border-radius: 9999px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: white;
-      font-size: 0.875rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-transform: capitalize;
-
-      &:hover {
-        transform: scale(1.05);
-      }
-
-      &.normal { background-color: #A8A878; }
-      &.fire { background-color: #F08030; }
-      &.water { background-color: #6890F0; }
-      &.grass { background-color: #78C850; }
-      &.electric { background-color: #F8D030; }
-      &.ice { background-color: #98D8D8; }
-      &.fighting { background-color: #C03028; }
-      &.poison { background-color: #A040A0; }
-      &.ground { background-color: #E0C068; }
-      &.flying { background-color: #A890F0; }
-      &.psychic { background-color: #F85888; }
-      &.bug { background-color: #A8B820; }
-      &.rock { background-color: #B8A038; }
-      &.ghost { background-color: #705898; }
-      &.dragon { background-color: #7038F8; }
-      &.dark { background-color: #705848; }
-      &.steel { background-color: #B8B8D0; }
-      &.fairy { background-color: #EE99AC; }
-
-      &.active {
-        box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-        border-color: white;
-      }
-
-      &.clear-filter {
-        background: rgba(31, 41, 55, 0.5);
-        backdrop-filter: blur(8px);
-        
-        &:hover {
-          background: rgba(75, 85, 99, 0.7);
         }
       }
     }
@@ -122,6 +186,126 @@
     &:hover {
       background: rgba(75, 85, 99, 0.7);
       transform: scale(1.05);
+    }
+  }
+}
+
+/* Нови анимации */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes shiftGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Нови стилове за loading screen */
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+
+  .pokeball-spinner {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: white;
+    position: relative;
+    margin-bottom: 1rem;
+    animation: spin 1s linear infinite;
+
+    &::before {
+      content: '';
+      position: absolute;
+      width: 60px;
+      height: 30px;
+      background: #ef4444;
+      border-radius: 30px 30px 0 0;
+      top: 0;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: white;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: 3px solid #111;
+    }
+  }
+
+  p {
+    color: white;
+    font-size: 1.125rem;
+    animation: pulse 1.5s infinite;
+  }
+}
+
+/* Стилове за selection status и battle controls */
+.selection-status,
+.battle-controls {
+  max-width: 800px;
+  margin: 1rem auto;
+  padding: 1rem;
+  background: rgba(31, 41, 55, 0.5);
+  backdrop-filter: blur(8px);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(75, 85, 99, 0.4);
+  text-align: center;
+
+  .selected-name {
+    color: #FFDE00;
+    font-weight: bold;
+  }
+}
+
+.battle-button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0 0.5rem;
+
+  &.start {
+    background: linear-gradient(to right, #059669, #10b981);
+    color: white;
+
+    &:hover {
+      background: linear-gradient(to right, #10b981, #34d399);
+    }
+  }
+
+  &.cancel {
+    background: rgba(239, 68, 68, 0.5);
+    color: white;
+
+    &:hover {
+      background: rgba(239, 68, 68, 0.7);
     }
   }
 }

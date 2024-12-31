@@ -16,7 +16,7 @@ function StatsRadar({ stats }) {
         <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
           <PolarGrid stroke="#ffffff44" />
           <PolarAngleAxis dataKey="subject" stroke="#fff" />
-          <PolarRadiusAxis stroke="#ffffff44" />
+          <PolarRadiusAxis domain={[0, 150]} tick={false} axisLine={false} /> 
           <Radar
             name="Stats"
             dataKey="value"

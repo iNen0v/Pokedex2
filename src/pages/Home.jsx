@@ -45,7 +45,9 @@ function Home() {
   }, [dispatch]);
 
   const filterAndSortPokemons = () => {
-    let filtered = pokemons;
+    if (!pokemons) return [];
+    
+    let filtered = [...pokemons];
 
     if (searchQuery) {
       filtered = filtered.filter(pokemon =>
@@ -53,20 +55,17 @@ function Home() {
       );
     }
 
-   
-    if (filters.types && filters.types.length > 0) {
+    if (filters.types?.length > 0) {
       filtered = filtered.filter(pokemon =>
         pokemon.types.some(t => filters.types.includes(t.type.name))
       );
     }
 
- 
     if (filters.minAttack) {
       filtered = filtered.filter(pokemon =>
         pokemon.stats[1].base_stat >= parseInt(filters.minAttack)
       );
     }
-
 
     if (filters.minDefense) {
       filtered = filtered.filter(pokemon =>
@@ -74,14 +73,13 @@ function Home() {
       );
     }
 
-  
     if (filters.showRare) {
       filtered = filtered.filter(pokemon => 
         pokemon.stats.reduce((sum, stat) => sum + stat.base_stat, 0) >= 500
       );
     }
 
-    return [...filtered].sort((a, b) => {
+    return filtered.sort((a, b) => {
       switch(sortBy) {
         case 'name':
           return a.name.localeCompare(b.name);
