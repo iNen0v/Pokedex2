@@ -1,21 +1,36 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector } from 'react-redux';
+import { createSelector } from '@reduxjs/toolkit';
 import BattleCard from './BattleCard';
 import '../styles/BattleList.scss';
 
+const selectPokemonData = createSelector(
+  [(state) => state.pokemons.data, (state) => state.pokemons.loading],
+  (data, loading) => ({
+    data: data || [],
+    loading
+  })
+);
+
 function BattleList({ onPokemonSelect, selectedPokemonId, opponentId }) {
-  const { data: pokemons, loading } = useSelector(state => ({
-    data: state.pokemons.data || [],
-    loading: state.pokemons.loading
-  }));
+  const { data: pokemons, loading } = useSelector(selectPokemonData);
+
+  const selectedPokemon = useMemo(() => 
+    pokemons.find(p => p.id === selectedPokemonId),
+    [pokemons, selectedPokemonId]
+  );
+
+  const opponentPokemon = useMemo(() =>
+    pokemons.find(p => p.id === opponentId),
+    [pokemons, opponentId]  
+  );
 
   return (
     <div className="battle-container">
       <div className="battle-container__background-pattern" />
       <div className="battle-container__decorative-line" />
 
-      {/* Секция за избрани покемони */}
       {selectedPokemonId && (
         <div className="selected-pokemon-preview">
           <motion.div 
@@ -25,7 +40,7 @@ function BattleList({ onPokemonSelect, selectedPokemonId, opponentId }) {
           >
             <div className="selection-badge">Player 1</div>
             <img 
-              src={pokemons.find(p => p.id === selectedPokemonId)?.sprites.front_default}
+              src={selectedPokemon?.sprites.front_default}
               alt="Selected Pokemon"
             />
           </motion.div>
@@ -56,7 +71,7 @@ function BattleList({ onPokemonSelect, selectedPokemonId, opponentId }) {
               >
                 <div className="selection-badge">Player 2</div>
                 <img 
-                  src={pokemons.find(p => p.id === opponentId)?.sprites.front_default}
+                  src={opponentPokemon?.sprites.front_default}
                   alt="Opponent Pokemon"
                 />
               </motion.div>
@@ -65,16 +80,19 @@ function BattleList({ onPokemonSelect, selectedPokemonId, opponentId }) {
         </div>
       )}
 
-      <h1 className="battle-title">Battle Arena</h1> {/* Добавяме заглавието */}
+      <h1 className="battle-title">Battle Arena</h1>
 
       <div className="content">
-        {loading ? (
+        {!pokemons.length ? (
           <motion.div 
-            className="loading-spinner"
+            className="loading-screen"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            Loading Pokémon...
+            <div className="pokeball-spinner">
+              <div className="center-circle" />
+            </div>
+            <p>Loading Pokémon...</p>
           </motion.div>
         ) : (
           <motion.div 

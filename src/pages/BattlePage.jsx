@@ -1,9 +1,11 @@
+// BattlePage.jsx
 import React, { useState, useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { debounce, throttle } from 'lodash';
 import { Search, Zap, Shield, Database, X } from 'lucide-react';
+import { createSelector } from '@reduxjs/toolkit';
 import BattleList from '../components/BattleList';
 import { fetchPokemons } from '../redux/actions';
 import '../styles/BattlePage.scss';
@@ -18,6 +20,14 @@ const quickSelectValues = {
  medium: { attack: 75, defense: 75 },
  high: { attack: 100, defense: 100 }
 };
+
+const selectPokemonData = createSelector(
+ [(state) => state.pokemons.data, (state) => state.pokemons.loading],
+ (data, loading) => ({
+   data: data || [],
+   loading
+ })
+);
 
 function BattlePage() {
  const dispatch = useDispatch();
@@ -38,10 +48,7 @@ function BattlePage() {
    parseInt(localStorage.getItem('battleDefenseFilter')) || 0
  );
 
- const { data: pokemons, loading } = useSelector(state => {
-   console.log('Redux State:', state);
-   return state.pokemons;
- });
+ const { data: pokemons, loading } = useSelector(selectPokemonData);
 
  const debouncedSearch = useMemo(
    () => debounce((value) => setSearchTerm(value), 300),
@@ -66,14 +73,8 @@ function BattlePage() {
  }, [searchTerm, selectedType, attackFilter, defenseFilter]);
 
  useEffect(() => {
-   console.log('Current pokemons:', pokemons);
-   if (!pokemons) {
-     console.log('Dispatching fetchPokemons');
-     dispatch(fetchPokemons())
-       .then(() => console.log('Pokemons fetched successfully'))
-       .catch(error => console.error('Error fetching pokemons:', error));
-   }
- }, [dispatch, pokemons]);
+   dispatch(fetchPokemons());
+ }, [dispatch]);
 
  const clearAllFilters = () => {
    setSearchTerm('');
@@ -107,7 +108,8 @@ function BattlePage() {
  };
 
  const filteredPokemons = useMemo(() => {
-   return pokemons?.filter(pokemon => {
+   if (!pokemons?.length) return [];
+   return pokemons.filter(pokemon => {
      const matchesSearch = pokemon.name.toLowerCase().includes(searchTerm.toLowerCase());
      const matchesType = !selectedType || pokemon.types.some(t => t.type.name === selectedType);
      const matchesAttack = pokemon.stats[1].base_stat >= attackFilter;
