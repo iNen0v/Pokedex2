@@ -11,12 +11,12 @@ import '../styles/PokemonDetails.scss';
 
 const typeColors = {
   normal: '#A8A878',
-  fire: '#F08030',
+  fire: '#f03030',
   water: '#6890F0',
   electric: '#F8D030',
   grass: '#78C850',
   ice: '#98D8D8',
-  fighting: '#C03028',
+  fighting: '#c06528',
   poison: '#A040A0',
   ground: '#E0C068',
   flying: '#A890F0',
@@ -59,7 +59,7 @@ function PokemonDetails() {
     };
 
     fetchPokemonData();
-    setShowShiny(false); // Reset shiny state on pokemon change
+    setShowShiny(false); 
   }, [id]);
 
   const handleFavoriteClick = () => {

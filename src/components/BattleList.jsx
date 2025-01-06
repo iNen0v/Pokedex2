@@ -1,26 +1,16 @@
 import React, { useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useSelector } from 'react-redux';
-import { createSelector } from '@reduxjs/toolkit';
+import { motion } from 'framer-motion';
 import BattleCard from './BattleCard';
 import '../styles/BattleList.scss';
 
-const selectPokemonData = createSelector(
-  [(state) => state.pokemons.data, (state) => state.pokemons.loading],
-  (data, loading) => ({
-    data: data || [],
-    loading
-  })
-);
-
-function BattleList({ onPokemonSelect, selectedPokemonId, opponentId }) {
-  const { data: pokemons, loading } = useSelector(selectPokemonData);
-
+function BattleList({ pokemons, onPokemonSelect, selectedPokemonId, opponentId }) {
+  // Намираме избрания покемон
   const selectedPokemon = useMemo(() => 
     pokemons.find(p => p.id === selectedPokemonId),
     [pokemons, selectedPokemonId]
   );
 
+  // Намираме покемона опонент
   const opponentPokemon = useMemo(() =>
     pokemons.find(p => p.id === opponentId),
     [pokemons, opponentId]  
@@ -92,7 +82,7 @@ function BattleList({ onPokemonSelect, selectedPokemonId, opponentId }) {
             <div className="pokeball-spinner">
               <div className="center-circle" />
             </div>
-            <p>Loading Pokémon...</p>
+            <p>Зареждане на покемони...</p>
           </motion.div>
         ) : (
           <motion.div 

@@ -3,30 +3,20 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import '../styles/BattleArena.scss';
 
-function BattleArena() {
-  const { pokemon1Id, pokemon2Id } = useParams();
-  const navigate = useNavigate();
-  const pokemons = useSelector(state => state.pokemons.data);
+const BattleArena = ({ pokemon1, pokemon2 }) => {
   const [currentTurn, setCurrentTurn] = useState(1);
   const [battleLog, setBattleLog] = useState([]);
   const [battleEnded, setBattleEnded] = useState(false);
   const [winner, setWinner] = useState(null);
-
-  const pokemon1 = pokemons.find(p => p.id === parseInt(pokemon1Id));
-  const pokemon2 = pokemons.find(p => p.id === parseInt(pokemon2Id));
-
   const [pokemon1HP, setPokemon1HP] = useState(null);
   const [pokemon2HP, setPokemon2HP] = useState(null);
 
   useEffect(() => {
-    if (!pokemon1 || !pokemon2) {
-      navigate('/battle');
-      return;
+    if (pokemon1 && pokemon2) {
+      setPokemon1HP(pokemon1.stats[0].base_stat);
+      setPokemon2HP(pokemon2.stats[0].base_stat);
     }
-
-    setPokemon1HP(pokemon1.stats[0].base_stat);
-    setPokemon2HP(pokemon2.stats[0].base_stat);
-  }, [pokemon1, pokemon2, navigate]);
+  }, [pokemon1, pokemon2]);
 
   const calculateDamage = (attacker, defender) => {
     const attack = attacker.stats[1].base_stat;
@@ -69,60 +59,45 @@ function BattleArena() {
     setCurrentTurn(currentTurn === 1 ? 2 : 1);
   };
 
-  if (!pokemon1 || !pokemon2 || pokemon1HP === null || pokemon2HP === null) {
-    return null;
-  }
-
   const renderPokemonCard = (pokemon, currentHP, isCurrentTurn, onAttack) => (
-    <div
-      className={`flex-1 bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700 ${
-        isCurrentTurn ? 'ring-2 ring-yellow-400 animate-pulse' : ''
-      }`}
-    >
+    <div className={`flex-1 bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700 
+      ${isCurrentTurn ? 'ring-2 ring-yellow-400 animate-pulse' : ''}`}>
       <div className="relative">
         <img
-          src={pokemon.sprites.front_default}
+          src={pokemon.sprites.front_default || '/api/placeholder/96/96'}
           alt={pokemon.name}
-          className={`w-40 h-40 mx-auto hover:scale-110 transition-transform duration-300 ${
-            winner === pokemon ? 'animate-bounce' : ''
-          }`}
+          className={`w-40 h-40 mx-auto hover:scale-110 transition-transform duration-300 
+            ${winner === pokemon ? 'animate-bounce' : ''}`}
         />
         <h2 className="text-2xl font-bold text-white text-center capitalize mb-4">{pokemon.name}</h2>
 
         <div className="mb-6">
           <div className="flex justify-between text-sm text-gray-300 mb-1">
             <span>HP</span>
-            <span>
-              {currentHP}/{pokemon.stats[0].base_stat}
-            </span>
+            <span>{currentHP}/{pokemon.stats[0].base_stat}</span>
           </div>
           <div className="h-4 bg-gray-700 rounded-full overflow-hidden">
             <div
               className="h-full transition-all duration-300"
               style={{
                 width: `${(currentHP / pokemon.stats[0].base_stat) * 100}%`,
-                backgroundColor:
-                  currentHP > pokemon.stats[0].base_stat * 0.5
-                    ? '#22c55e'
-                    : currentHP > pokemon.stats[0].base_stat * 0.2
-                    ? '#eab308'
-                    : '#ef4444',
+                backgroundColor: currentHP > pokemon.stats[0].base_stat * 0.5 ? '#22c55e' : 
+                               currentHP > pokemon.stats[0].base_stat * 0.2 ? '#eab308' : '#ef4444'
               }}
             />
           </div>
         </div>
 
         <div className="space-y-3">
-          {pokemon.moves.slice(0, 4).map(move => (
+          {pokemon.moves?.slice(0, 4).map(move => (
             <button
               key={move.move.name}
               onClick={() => isCurrentTurn && !battleEnded && onAttack(pokemon, move)}
               disabled={!isCurrentTurn || battleEnded}
-              className={`w-full p-3 rounded-lg text-white transition-all duration-200 ${
-                isCurrentTurn && !battleEnded
-                  ? 'bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 transform hover:scale-105'
-                  : 'bg-gray-700 cursor-not-allowed'
-              }`}
+              className={`w-full p-3 rounded-lg text-white transition-all duration-200 
+                ${isCurrentTurn && !battleEnded ? 
+                  'bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 transform hover:scale-105' : 
+                  'bg-gray-700 cursor-not-allowed'}`}
             >
               {move.move.name.replace('-', ' ')}
             </button>
@@ -132,6 +107,10 @@ function BattleArena() {
     </div>
   );
 
+  if (!pokemon1 || !pokemon2 || pokemon1HP === null || pokemon2HP === null) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-purple-900 to-gray-900">
       <div className="h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500" />
@@ -139,7 +118,9 @@ function BattleArena() {
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-5xl font-bold text-center mb-12 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
           Pokemon Battle!
-          {battleEnded && winner && <div className="mt-4 text-3xl text-yellow-500">Winner: {winner.name}!</div>}
+          {battleEnded && winner && (
+            <div className="mt-4 text-3xl text-yellow-500">Winner: {winner.name}!</div>
+          )}
         </h1>
 
         <div className="flex justify-between items-center gap-8 mb-8">
@@ -147,12 +128,6 @@ function BattleArena() {
 
           <div className="text-center">
             <div className="text-7xl font-bold text-red-500 animate-pulse mb-6">VS</div>
-            <button
-              onClick={() => navigate('/battle')}
-              className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-all duration-200 transform hover:scale-105"
-            >
-              Back
-            </button>
           </div>
 
           {renderPokemonCard(pokemon2, pokemon2HP, currentTurn === 2, handleAttack)}
@@ -162,27 +137,15 @@ function BattleArena() {
           <h3 className="text-xl font-bold text-white mb-4">Battle Log</h3>
           <div className="max-h-40 overflow-y-auto space-y-2">
             {battleLog.map((log, index) => (
-              <div
-                key={index}
-                className="text-gray-300 py-2 px-4 rounded bg-gray-700/50 hover:bg-gray-700 transition-colors"
-              >
+              <div key={index} className="text-gray-300 py-2 px-4 rounded bg-gray-700/50 hover:bg-gray-700 transition-colors">
                 {log}
               </div>
             ))}
           </div>
         </div>
-
-        {battleEnded && (
-          <button
-            onClick={() => navigate('/battle')}
-            className="mt-8 px-8 py-4 bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white text-lg font-bold rounded-lg mx-auto block transform hover:scale-105 transition-all duration-200"
-          >
-            New Battle
-          </button>
-        )}
       </div>
     </div>
   );
-}
+};
 
 export default BattleArena;

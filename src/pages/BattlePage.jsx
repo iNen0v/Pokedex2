@@ -1,297 +1,249 @@
-// BattlePage.jsx
 import React, { useState, useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { debounce, throttle } from 'lodash';
-import { Search, Zap, Shield, Database, X } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import { createSelector } from '@reduxjs/toolkit';
-import BattleList from '../components/BattleList';
+import BattleCard from '../components/BattleCard';
+import ArenaFilters from '../components/ArenaFilters';
 import { fetchPokemons } from '../redux/actions';
 import '../styles/BattlePage.scss';
 
-const pokemonTypes = [
- "normal", "fire", "water", "electric", "grass", "ice", "fighting", "poison",
- "ground", "flying", "psychic", "bug", "rock", "ghost", "dragon", "dark", "steel", "fairy"
-];
+const selectPokemonData = (state) => state.pokemons.data;
+const selectPokemonLoading = (state) => state.pokemons.loading;
 
-const quickSelectValues = {
- low: { attack: 50, defense: 50 },
- medium: { attack: 75, defense: 75 },
- high: { attack: 100, defense: 100 }
-};
-
-const selectPokemonData = createSelector(
- [(state) => state.pokemons.data, (state) => state.pokemons.loading],
- (data, loading) => ({
-   data: data || [],
-   loading
- })
+const selectPokemonState = createSelector(
+  [selectPokemonData, selectPokemonLoading],
+  (data, loading) => ({
+    pokemons: data || [],
+    loading,
+  })
 );
 
 function BattlePage() {
- const dispatch = useDispatch();
- const navigate = useNavigate();
- 
- const [selectedPokemon, setSelectedPokemon] = useState(null);
- const [opponent, setOpponent] = useState(null);
- const [searchTerm, setSearchTerm] = useState(() => 
-   localStorage.getItem('battleSearchTerm') || ''
- );
- const [selectedType, setSelectedType] = useState(() => 
-   localStorage.getItem('battleSelectedType') || null
- );
- const [attackFilter, setAttackFilter] = useState(() => 
-   parseInt(localStorage.getItem('battleAttackFilter')) || 0
- );
- const [defenseFilter, setDefenseFilter] = useState(() => 
-   parseInt(localStorage.getItem('battleDefenseFilter')) || 0
- );
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [selectedPokemon, setSelectedPokemon] = useState(null);
+  const [opponent, setOpponent] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filters, setFilters] = useState({
+    types: [],
+    minAttack: '',
+    minDefense: '',
+    showRare: false,
+  });
 
- const { data: pokemons, loading } = useSelector(selectPokemonData);
+  const { pokemons, loading } = useSelector(selectPokemonState);
 
- const debouncedSearch = useMemo(
-   () => debounce((value) => setSearchTerm(value), 300),
-   []
- );
+  useEffect(() => {
+    dispatch(fetchPokemons());
+  }, [dispatch]);
 
- const throttledAttackChange = useMemo(
-   () => throttle((value) => setAttackFilter(value), 100),
-   []
- );
+  const selectedPokemonData = useMemo(() => 
+    pokemons.find(p => p.id === selectedPokemon?.id),
+    [pokemons, selectedPokemon]
+  );
 
- const throttledDefenseChange = useMemo(
-   () => throttle((value) => setDefenseFilter(value), 100),
-   []
- );
+  const opponentPokemonData = useMemo(() =>
+    pokemons.find(p => p.id === opponent?.id),
+    [pokemons, opponent]  
+  );
 
- useEffect(() => {
-   localStorage.setItem('battleSearchTerm', searchTerm);
-   localStorage.setItem('battleSelectedType', selectedType);
-   localStorage.setItem('battleAttackFilter', attackFilter.toString());
-   localStorage.setItem('battleDefenseFilter', defenseFilter.toString());
- }, [searchTerm, selectedType, attackFilter, defenseFilter]);
+  const filteredPokemons = useMemo(() => {
+    return pokemons.filter((pokemon) => {
+      if (searchTerm && !pokemon.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+        return false;
+      }
+      if (filters.types.length > 0 && !filters.types.some(type => pokemon.types.map(t => t.type.name).includes(type))) {
+        return false;
+      }
+      if (filters.minAttack && pokemon.stats[1].base_stat < parseInt(filters.minAttack)) {
+        return false;
+      }
+      if (filters.minDefense && pokemon.stats[2].base_stat < parseInt(filters.minDefense)) {
+        return false;
+      }
+      return true;
+    });
+  }, [pokemons, searchTerm, filters]);
 
- useEffect(() => {
-   dispatch(fetchPokemons());
- }, [dispatch]);
+  const handlePokemonSelect = (pokemon) => {
+    if (!selectedPokemon) {
+      setSelectedPokemon(pokemon);
+    } else if (pokemon.id !== selectedPokemon.id) {
+      setOpponent(pokemon);
+    }
+  };
 
- const clearAllFilters = () => {
-   setSearchTerm('');
-   setSelectedType(null);
-   setAttackFilter(0);
-   setDefenseFilter(0);
-   localStorage.removeItem('battleSearchTerm');
-   localStorage.removeItem('battleSelectedType');
-   localStorage.removeItem('battleAttackFilter');
-   localStorage.removeItem('battleDefenseFilter');
- };
+  const handleStartBattle = () => {
+    if (selectedPokemon && opponent) {
+      navigate(`/battle-arena/${selectedPokemon.id}/${opponent.id}`);
+    }
+  };
 
- const handlePokemonSelect = (pokemon) => {
-   if (!selectedPokemon) {
-     setSelectedPokemon(pokemon);
-   } else if (pokemon.id !== selectedPokemon.id) {
-     setOpponent(pokemon);
-   }
- };
+  const handleCancelSelection = () => {
+    setSelectedPokemon(null);
+    setOpponent(null);
+  };
 
- const handleStartBattle = () => {
-   if (selectedPokemon && opponent) {
-     navigate(`/battle-arena/${selectedPokemon.id}/${opponent.id}`);
-   }
- };
+  return (
+    <div className="battle-page">
+      <div className="battle-page__background-pattern" />
+      <div className="battle-page__decorative-line" />
 
- const handleCancelSelection = () => {
-   setSelectedPokemon(null);
-   setOpponent(null);
-   setSelectedType(null);
- };
+      <motion.button
+        className="back-button"
+        onClick={() => navigate("/")}
+        whileHover={{ x: -5 }}
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.3 }}
+      >
+        <X size={16} className="icon" />
+        Back to Pokédex
+      </motion.button>
 
- const filteredPokemons = useMemo(() => {
-   if (!pokemons?.length) return [];
-   return pokemons.filter(pokemon => {
-     const matchesSearch = pokemon.name.toLowerCase().includes(searchTerm.toLowerCase());
-     const matchesType = !selectedType || pokemon.types.some(t => t.type.name === selectedType);
-     const matchesAttack = pokemon.stats[1].base_stat >= attackFilter;
-     const matchesDefense = pokemon.stats[2].base_stat >= defenseFilter;
-     return matchesSearch && matchesType && matchesAttack && matchesDefense;
-   });
- }, [pokemons, searchTerm, selectedType, attackFilter, defenseFilter]);
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="relative mb-6">
+          <input
+            type="text"
+            placeholder="Search for your next champion..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full bg-slate-900/95 text-white placeholder-gray-400 rounded-xl py-3 px-6 outline-none"
+          />
+          <Search className="absolute right-6 top-1/2 transform -translate-y-1/2 text-gray-400" />
+        </div>
 
- return (
-   <div className="battle-page">
-     <div className="battle-page__background-pattern" />
-     <div className="battle-page__decorative-line" />
+        <ArenaFilters filters={filters} setFilters={setFilters} />
 
-     <motion.div
-       className="battle-page__content"
-       initial={{ opacity: 0 }}
-       animate={{ opacity: 1 }}
-     >
-       <div className="battle-page__header">
-         <motion.button
-           className="back-button"
-           onClick={() => navigate("/")}
-           whileHover={{ x: -5 }}
-         >
-           <X size={16} className="icon" />
-           Back to Pokédex
-         </motion.button>
-       </div>
+        {selectedPokemonData && (
+          <div className="selected-pokemon-preview">
+            <motion.div 
+              className="selected-pokemon"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <div className="selection-badge">Player 1</div>
+              <img 
+                src={selectedPokemonData.sprites.front_default}
+                alt="Selected Pokemon"
+              />
+            </motion.div>
 
-       <div className="search-section">
-         <motion.div
-           className="search-container"
-           initial={{ y: -20, opacity: 0 }}
-           animate={{ y: 0, opacity: 1 }}
-         >
-           <Search className="search-icon" />
-           <input
-             type="text"
-             placeholder="Search for your next champion..."
-             defaultValue={searchTerm}
-             onChange={(e) => debouncedSearch(e.target.value)}
-             className="pokemon-search"
-           />
-         </motion.div>
+            {!opponent && (
+              <motion.div 
+                className="vs-badge"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+              >
+                Choose Opponent
+              </motion.div>
+            )}
 
-         <motion.div
-           className="type-filters"
-           initial={{ y: 20, opacity: 0 }}
-           animate={{ y: 0, opacity: 1 }}
-         >
-           {pokemonTypes.map((type) => (
-             <motion.button
-               key={type}
-               className={`${type} ${selectedType === type ? 'active' : ''}`}
-               onClick={() => setSelectedType(type === selectedType ? null : type)}
-               whileHover={{ scale: 1.05 }}
-               whileTap={{ scale: 0.95 }}
-             >
-               {type}
-             </motion.button>
-           ))}
-         </motion.div>
-       </div>
+            {opponentPokemonData && (
+              <>
+                <motion.div 
+                  className="vs-badge"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                >
+                  VS
+                </motion.div>
+                <motion.div 
+                  className="selected-pokemon"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <div className="selection-badge">Player 2</div>
+                  <img 
+                    src={opponentPokemonData.sprites.front_default}
+                    alt="Opponent Pokemon"
+                  />
+                </motion.div>
+              </>
+            )}
+          </div>
+        )}
 
-       <div className="stats-filters">
-         <div className="filter-container">
-           <div className="filter-header">
-             <Zap className="filter-icon" />
-             <label title="Filter by Attack power">Attack: {attackFilter}</label>
-           </div>
-           <input
-             type="range"
-             min="0"
-             max="150"
-             value={attackFilter}
-             onChange={(e) => throttledAttackChange(Number(e.target.value))}
-             className="slider"
-           />
-           <div className="quick-select">
-             <button onClick={() => setAttackFilter(quickSelectValues.low.attack)}>Low</button>
-             <button onClick={() => setAttackFilter(quickSelectValues.medium.attack)}>Med</button>
-             <button onClick={() => setAttackFilter(quickSelectValues.high.attack)}>High</button>
-           </div>
-         </div>
+        <h1 className="battle-title">Battle Arena</h1>
 
-         <div className="filter-container">
-           <div className="filter-header">
-             <Shield className="filter-icon" />
-             <label title="Filter by Defense power">Defense: {defenseFilter}</label>
-           </div>
-           <input
-             type="range"
-             min="0"
-             max="150"
-             value={defenseFilter}
-             onChange={(e) => throttledDefenseChange(Number(e.target.value))}
-             className="slider"
-           />
-           <div className="quick-select">
-             <button onClick={() => setDefenseFilter(quickSelectValues.low.defense)}>Low</button>
-             <button onClick={() => setDefenseFilter(quickSelectValues.medium.defense)}>Med</button>
-             <button onClick={() => setDefenseFilter(quickSelectValues.high.defense)}>High</button>
-           </div>
-         </div>
+        <AnimatePresence>
+          {loading ? (
+            <motion.div
+              className="loading-screen"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <div className="pokeball-spinner">
+                <div className="center-circle" />
+              </div>
+              <p>Loading Pokémon...</p>
+            </motion.div>
+          ) : (
+            <motion.div 
+              className="grid-container"
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                gap: '20px',
+                padding: '20px'
+              }}
+            >
+              {filteredPokemons.map((pokemon, index) => (
+                <motion.div
+                  key={pokemon.id}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                  onClick={() => handlePokemonSelect(pokemon)}
+                  whileHover={{ scale: 1.03 }}
+                >
+                  <BattleCard
+                    pokemon={pokemon}
+                    isSelected={selectedPokemon?.id === pokemon.id || opponent?.id === pokemon.id}
+                    selectionType={
+                      selectedPokemon?.id === pokemon.id ? 'player1' : 
+                      opponent?.id === pokemon.id ? 'player2' : null
+                    }
+                  />
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-         <div className="filters-info">
-           <Database className="filter-icon" />
-           <span>{filteredPokemons?.length || 0} Pokémon found</span>
-           <motion.button
-             className="clear-filters-btn"
-             onClick={clearAllFilters}
-             whileHover={{ scale: 1.05 }}
-             whileTap={{ scale: 0.95 }}
-           >
-             Clear All
-           </motion.button>
-         </div>
-       </div>
-
-       <AnimatePresence mode="wait">
-         {selectedPokemon && !opponent && (
-           <motion.div
-             className="selection-status"
-             initial={{ opacity: 0, y: -20 }}
-             animate={{ opacity: 1, y: 0 }}
-             exit={{ opacity: 0, y: 20 }}
-           >
-             <span className="status-text">
-               <span className="selected-name">{selectedPokemon.name}</span> is ready! Choose your opponent
-             </span>
-           </motion.div>
-         )}
-       </AnimatePresence>
-
-       {selectedPokemon && opponent && (
-         <motion.div
-           className="battle-controls"
-           initial={{ opacity: 0, y: -20 }}
-           animate={{ opacity: 1, y: 0 }}
-         >
-           <motion.button
-             className="battle-button start"
-             onClick={handleStartBattle}
-             whileHover={{ scale: 1.05 }}
-             whileTap={{ scale: 0.95 }}
-           >
-             ⚔️ Start Battle!
-           </motion.button>
-           <motion.button
-             className="battle-button cancel"
-             onClick={handleCancelSelection}
-             whileHover={{ scale: 1.05 }}
-             whileTap={{ scale: 0.95 }}
-           >
-             ✖️ Cancel
-           </motion.button>
-         </motion.div>
-       )}
-
-       <AnimatePresence>
-         {loading || !pokemons ? (
-           <motion.div 
-             className="loading-screen"
-             initial={{ opacity: 0 }}
-             animate={{ opacity: 1 }}
-             exit={{ opacity: 0 }}
-           >
-             <div className="pokeball-spinner" />
-             <p>Loading Pokémon...</p>
-           </motion.div>
-         ) : (
-           <BattleList
-             pokemons={filteredPokemons}
-             onPokemonSelect={handlePokemonSelect}
-             selectedPokemonId={selectedPokemon?.id}
-             opponentId={opponent?.id}
-           />
-         )}
-       </AnimatePresence>
-     </motion.div>
-   </div>
- );
+        {selectedPokemon && opponent && (
+          <div className="battle-controls-wrapper">
+            <motion.div 
+              className="battle-controls"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <motion.button 
+                className="battle-button start"
+                onClick={handleStartBattle}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                ⚔️ Start Battle!
+              </motion.button>
+              <motion.button 
+                className="battle-button cancel"
+                onClick={handleCancelSelection}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                ✖️ Cancel
+              </motion.button>
+            </motion.div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default BattlePage;

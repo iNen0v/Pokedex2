@@ -136,3 +136,10 @@ export const fetchPokemons = createAsyncThunk(
     }
   }
 );
+
+export { 
+  setTypeFilter, 
+  setAttackFilter, 
+  setDefenseFilter, 
+  clearFilters 
+} from './reducers/pokemonReducer';
