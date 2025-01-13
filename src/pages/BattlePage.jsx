@@ -77,7 +77,10 @@ function BattlePage() {
 
   const handleStartBattle = () => {
     if (selectedPokemon && opponent) {
+      console.log("Starting battle:", selectedPokemon.id, opponent.id);
       navigate(`/battle-arena/${selectedPokemon.id}/${opponent.id}`);
+    } else {
+      console.log("Cannot start battle: Pokemon not selected", selectedPokemon, opponent);
     }
   };
 

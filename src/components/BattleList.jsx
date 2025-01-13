@@ -4,13 +4,13 @@ import BattleCard from './BattleCard';
 import '../styles/BattleList.scss';
 
 function BattleList({ pokemons, onPokemonSelect, selectedPokemonId, opponentId }) {
-  // Намираме избрания покемон
+  
   const selectedPokemon = useMemo(() => 
     pokemons.find(p => p.id === selectedPokemonId),
     [pokemons, selectedPokemonId]
   );
 
-  // Намираме покемона опонент
+  
   const opponentPokemon = useMemo(() =>
     pokemons.find(p => p.id === opponentId),
     [pokemons, opponentId]  
@@ -102,6 +102,8 @@ function BattleList({ pokemons, onPokemonSelect, selectedPokemonId, opponentId }
                 transition={{ duration: 0.3, delay: index * 0.05 }}
                 onClick={() => onPokemonSelect(pokemon)}
                 whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
+                layout
               >
                 <BattleCard
                   pokemon={pokemon}

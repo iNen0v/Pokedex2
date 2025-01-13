@@ -2,14 +2,18 @@
   background: rgba(15, 23, 42, 0.95);
   border-radius: 16px;
   padding: 24px;
- 
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+
   .type-filters {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin-bottom: 24px;
     justify-content: center;
- 
+    margin-bottom: 24px;
+
     button {
       padding: 6px 12px;
       border-radius: 999px;
@@ -19,13 +23,18 @@
       display: flex;
       align-items: center;
       gap: 4px;
- 
+
       &:hover {
         transform: scale(1.05);
       }
+
+      @media (max-width: 480px) {
+        font-size: 10px;
+        padding: 4px 8px;
+      }
     }
   }
- 
+
   .stats-section {
     background: rgba(31, 41, 55, 0.5);
     border-radius: 12px;
@@ -33,13 +42,23 @@
 
     .stats-row {
       display: flex;
+      flex-wrap: wrap;
       gap: 24px;
+
+      @media (max-width: 768px) {
+        flex-direction: column;
+      }
     }
 
     .stat-filter {
       flex: 1;
+      min-width: 200px;
       margin-bottom: 16px;
- 
+
+      @media (max-width: 768px) {
+        width: 100%;
+      }
+
       &__label {
         display: flex;
         align-items: center;
@@ -47,22 +66,29 @@
         color: white;
         margin-bottom: 8px;
         font-size: 14px;
- 
+
         .icon {
           font-size: 16px;
         }
       }
- 
+
       &__slider {
         position: relative;
         height: 3px;
         background: #334155;
         border-radius: 2px;
         margin: 12px 0;
- 
+
+        &-track {
+          position: absolute;
+          height: 100%;
+          background: #FCD34D;
+          border-radius: 2px;
+        }
+
         input[type="range"] {
-          -webkit-appearance: none;
           appearance: none;
+          -webkit-appearance: none;
           width: 100%;
           background: transparent;
           
@@ -77,24 +103,24 @@
           }
         }
       }
- 
+
       &__values {
         display: flex;
         justify-content: space-between;
         gap: 6px;
- 
+
         button {
           padding: 3px 12px;
           border-radius: 999px;
           font-size: 12px;
           font-weight: 500;
           transition: all 0.2s;
- 
+
           &.active {
             background: white;
             color: black;
           }
- 
+
           &:not(.active) {
             background: #1E293B;
             color: white;
@@ -103,7 +129,7 @@
       }
     }
   }
- 
+
   .footer {
     display: flex;
     justify-content: space-between;
@@ -111,13 +137,13 @@
     color: white;
     margin-top: 20px;
     font-size: 14px;
- 
+
     &__count {
       display: flex;
       align-items: center;
       gap: 6px;
     }
- 
+
     &__clear {
       padding: 6px 12px;
       background: #991B1B;
@@ -125,13 +151,14 @@
       transition: all 0.2s;
       font-size: 12px;
       color: white;
- 
+
       &:hover {
         background: #7F1D1D;
       }
     }
   }
 }
+
 .search-bar {
   width: 100%;
   max-width: 600px;

@@ -3,7 +3,14 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import '../styles/BattleArena.scss';
 
-const BattleArena = ({ pokemon1, pokemon2 }) => {
+const BattleArena = () => {
+  const { pokemon1Id, pokemon2Id } = useParams();
+  const navigate = useNavigate();
+  const pokemons = useSelector(state => state.pokemons.data);
+  
+  const pokemon1 = pokemons.find(p => p.id === parseInt(pokemon1Id));
+  const pokemon2 = pokemons.find(p => p.id === parseInt(pokemon2Id));
+
   const [currentTurn, setCurrentTurn] = useState(1);
   const [battleLog, setBattleLog] = useState([]);
   const [battleEnded, setBattleEnded] = useState(false);
@@ -15,8 +22,10 @@ const BattleArena = ({ pokemon1, pokemon2 }) => {
     if (pokemon1 && pokemon2) {
       setPokemon1HP(pokemon1.stats[0].base_stat);
       setPokemon2HP(pokemon2.stats[0].base_stat);
+    } else {
+      navigate('/battle');
     }
-  }, [pokemon1, pokemon2]);
+  }, [pokemon1, pokemon2, navigate]);
 
   const calculateDamage = (attacker, defender) => {
     const attack = attacker.stats[1].base_stat;
