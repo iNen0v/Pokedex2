@@ -47,8 +47,7 @@ const typeColors = {
 
 function ArenaFilters({ filters, setFilters }) {
   return (
-    <div className="battle-filters">
-      {/* Типове покемони */}
+    <div className="arena-filters">
       <div className="type-filters">
         {Object.entries(typeIcons).map(([type, icon]) => (
           <motion.button
@@ -72,29 +71,30 @@ function ArenaFilters({ filters, setFilters }) {
         ))}
       </div>
 
-      {/* Статистики */}
       <div className="stats-section">
-        {[
-          { label: 'Attack', key: 'minAttack', icon: <Zap />, color: '#ef4444' },
-          { label: 'Defense', key: 'minDefense', icon: <Shield />, color: '#3b82f6' }
-        ].map(stat => (
-          <div key={stat.key} className="stat-row">
-            <div className="stat-header">
-              {stat.icon}
-              <span>{stat.label}: {filters[stat.key] || 0}</span>
-            </div>
-            <div className="slider-container">
-              <div className="slider-track" style={{
-                background: `linear-gradient(to right, ${stat.color} ${(filters[stat.key] || 0) / 1.5}%, rgba(55, 65, 81, 0.8) ${(filters[stat.key] || 0) / 1.5}%)`
-              }} />
-              <input
-                type="range"
-                min="0"
-                max="150"
-                value={filters[stat.key] || 0}
-                onChange={(e) => setFilters({ ...filters, [stat.key]: e.target.value })}
-              />
-              <div className="range-labels">
+        <div className="stats-row">
+          {[
+            { label: 'Attack', key: 'minAttack', icon: <Zap />, color: '#ef4444' },
+            { label: 'Defense', key: 'minDefense', icon: <Shield />, color: '#3b82f6' }
+          ].map(stat => (
+            <div key={stat.key} className="stat-filter">
+              <div className="stat-filter__label">
+                {stat.icon}
+                <span>{stat.label}: {filters[stat.key] || 0}</span>
+              </div>
+              <div className="stat-filter__slider">
+                <div className="stat-filter__slider-track" style={{
+                  background: `linear-gradient(to right, ${stat.color} ${(filters[stat.key] || 0) / 1.5}%, rgba(55, 65, 81, 0.8) ${(filters[stat.key] || 0) / 1.5}%)`
+                }} />
+                <input
+                  type="range"
+                  min="0"
+                  max="150"
+                  value={filters[stat.key] || 0}
+                  onChange={(e) => setFilters({ ...filters, [stat.key]: e.target.value })}
+                />
+              </div>
+              <div className="stat-filter__values">
                 {['Low', 'Med', 'High'].map(label => (
                   <button
                     key={label}
@@ -109,31 +109,30 @@ function ArenaFilters({ filters, setFilters }) {
                 ))}
               </div>
             </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Footer */}
-      <div className="filters-footer">
-        <div className="pokemon-count">
-          <Database />
-          <span>{filters.totalPokemon || 0} Pokémon found</span>
+          ))}
         </div>
-        {(filters.types.length > 0 || filters.minAttack || filters.minDefense) && (
-          <motion.button
-            className="clear-all"
-            onClick={() => setFilters({
-              types: [],
-              minAttack: '',
-              minDefense: '',
-              showRare: false
-            })}
-            whileHover={{ y: -1 }}
-            whileTap={{ y: 0 }}
-          >
-            Clear All
-          </motion.button>
-        )}
+
+        <div className="footer">
+          <div className="footer__count">
+            <Database />
+            <span>{filters.totalPokemon || 0} Pokémon found</span>
+          </div>
+          {(filters.types.length > 0 || filters.minAttack || filters.minDefense) && (
+            <motion.button
+              className="footer__clear"
+              onClick={() => setFilters({
+                types: [],
+                minAttack: '',
+                minDefense: '',
+                showRare: false
+              })}
+              whileHover={{ y: -1 }}
+              whileTap={{ y: 0 }}
+            >
+              Clear All
+            </motion.button>
+          )}
+        </div>
       </div>
     </div>
   );
