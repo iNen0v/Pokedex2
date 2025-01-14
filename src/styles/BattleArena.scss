@@ -4,8 +4,231 @@
   color: white;
   position: relative;
   overflow: hidden;
+  &__header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+  }
 
-  &__background-pattern {
+  &__back-button {
+    position: absolute;
+    left: 2rem;
+    top: 2rem;
+    padding: 0.75rem 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.5rem;
+    color: white;
+    font-weight: 600;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateX(-5px);
+    }
+  }
+
+  .turn-indicator {
+    position: absolute;
+    top: -2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    &__arrow {
+      background: #FFDE00;
+      color: #1a1a2e;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-weight: bold;
+      animation: bounce 1s infinite;
+      position: relative;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -0.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        border-left: 0.5rem solid transparent;
+        border-right: 0.5rem solid transparent;
+        border-top: 0.5rem solid #FFDE00;
+      }
+    }
+  }
+
+  &__turn-display {
+    font-size: 1.25rem;
+    color: #FFDE00;
+    text-align: center;
+    margin-top: 1rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  &__action-button {
+    padding: 0.75rem 2rem;
+    border-radius: 0.5rem;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    
+    &--new {
+      background: linear-gradient(to right, #3b82f6, #2563eb);
+      color: white;
+      
+      &:hover {
+        background: linear-gradient(to right, #2563eb, #1d4ed8);
+        transform: translateY(-2px);
+      }
+    }
+    
+    &--rematch {
+      background: linear-gradient(to right, #059669, #10b981);
+      color: white;
+      
+      &:hover {
+        background: linear-gradient(to right, #10b981, #34d399);
+        transform: translateY(-2px);
+      }
+    }
+  }
+
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+}
+
+.current-turn {
+  position: relative;
+  .battle-arena__pokemon-card {
+    animation: card-glow 2s infinite;
+  }
+}
+
+@keyframes card-glow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(255, 222, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(255, 222, 0, 0.5);
+  }
+}
+
+
+  .battle-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+
+    &__vs-sparkles {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 200px;
+      height: 200px;
+
+      .sparkle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: #ffd700;
+        border-radius: 50%;
+        opacity: 0;
+        animation: sparkle-fade 2s ease-in-out infinite;
+
+        &:nth-child(1) { left: 50%; top: 0; }
+        &:nth-child(2) { left: 85%; top: 15%; }
+        &:nth-child(3) { left: 100%; top: 50%; }
+        &:nth-child(4) { left: 85%; top: 85%; }
+        &:nth-child(5) { left: 50%; top: 100%; }
+        &:nth-child(6) { left: 15%; top: 85%; }
+        &:nth-child(7) { left: 0; top: 50%; }
+        &:nth-child(8) { left: 15%; top: 15%; }
+        &:nth-child(9) { left: 75%; top: 25%; }
+        &:nth-child(10) { left: 25%; top: 75%; }
+        &:nth-child(11) { left: 65%; top: 65%; }
+        &:nth-child(12) { left: 35%; top: 35%; }
+
+        @for $i from 1 through 12 {
+          &:nth-child(#{$i}) {
+            animation-delay: #{$i * 0.15}s;
+          }
+        }
+      }
+    }
+
+    &__background {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+
+      .particle {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 50%;
+        animation: float-up 4s linear infinite;
+
+        &:nth-child(1) { left: 5%; top: 15%; animation-duration: 3s; animation-delay: 0.2s; opacity: 0.3; }
+        &:nth-child(2) { left: 10%; top: 30%; animation-duration: 3.5s; animation-delay: 0.4s; opacity: 0.4; }
+        &:nth-child(3) { left: 15%; top: 45%; animation-duration: 4s; animation-delay: 0.6s; opacity: 0.5; }
+        &:nth-child(4) { left: 20%; top: 60%; animation-duration: 4.5s; animation-delay: 0.8s; opacity: 0.6; }
+        &:nth-child(5) { left: 25%; top: 75%; animation-duration: 5s; animation-delay: 1s; opacity: 0.7; }
+        &:nth-child(6) { left: 30%; top: 90%; animation-duration: 5.5s; animation-delay: 1.2s; opacity: 0.8; }
+        &:nth-child(7) { left: 35%; top: 15%; animation-duration: 6s; animation-delay: 1.4s; opacity: 0.9; }
+        &:nth-child(8) { left: 40%; top: 30%; animation-duration: 6.5s; animation-delay: 1.6s; opacity: 0.4; }
+        &:nth-child(9) { left: 45%; top: 45%; animation-duration: 7s; animation-delay: 1.8s; opacity: 0.5; }
+        &:nth-child(10) { left: 50%; top: 60%; animation-duration: 3s; animation-delay: 2s; opacity: 0.6; }
+        &:nth-child(11) { left: 55%; top: 75%; animation-duration: 3.5s; animation-delay: 2.2s; opacity: 0.7; }
+        &:nth-child(12) { left: 60%; top: 90%; animation-duration: 4s; animation-delay: 2.4s; opacity: 0.8; }
+        &:nth-child(13) { left: 65%; top: 15%; animation-duration: 4.5s; animation-delay: 2.6s; opacity: 0.9; }
+        &:nth-child(14) { left: 70%; top: 30%; animation-duration: 5s; animation-delay: 2.8s; opacity: 0.4; }
+        &:nth-child(15) { left: 75%; top: 45%; animation-duration: 5.5s; animation-delay: 3s; opacity: 0.5; }
+        &:nth-child(16) { left: 80%; top: 60%; animation-duration: 6s; animation-delay: 3.2s; opacity: 0.6; }
+        &:nth-child(17) { left: 85%; top: 75%; animation-duration: 6.5s; animation-delay: 3.4s; opacity: 0.7; }
+        &:nth-child(18) { left: 90%; top: 90%; animation-duration: 7s; animation-delay: 3.6s; opacity: 0.8; }
+        &:nth-child(19) { left: 95%; top: 15%; animation-duration: 3s; animation-delay: 3.8s; opacity: 0.9; }
+        &:nth-child(20) { left: 100%; top: 30%; animation-duration: 3.5s; animation-delay: 4s; opacity: 0.5; }
+      }
+    }
+
+    &__attack-flash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: white;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 10;
+
+      &--active {
+        animation: attack-flash 0.3s ease-out;
+      }
+    }
+  }
+
+  .battle-arena__background-pattern {
     position: absolute;
     inset: 0;
     background-image: url('/pokeball-pattern.png');
@@ -13,29 +236,37 @@
     pointer-events: none;
   }
 
-  &__header {
+  .battle-arena__header {
     height: 0.5rem;
     background: linear-gradient(to right, #4f46e5, #7e22ce, #ec4899);
   }
 
-  &__container {
+  .battle-arena__container {
     margin: 0 auto;
     padding: 2rem 1rem;
     max-width: 1200px;
+    position: relative;
+    z-index: 2;
   }
 
-  &__title {
-    font-size: 3rem;
+  .battle-arena__title {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 3.5rem;
     font-weight: bold;
     text-align: center;
     margin-bottom: 3rem;
     color: #FFDE00;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: 
+      4px 4px 0 #2563eb,
+      -2px -2px 0 #2563eb,
+      2px -2px 0 #2563eb,
+      -2px 2px 0 #2563eb;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 4px;
+    animation: title-glow 3s ease-in-out infinite;
   }
 
-  &__battle-container {
+  .battle-arena__battle-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -43,7 +274,7 @@
     margin-bottom: 2rem;
   }
 
-  &__pokemon-card {
+  .battle-arena__pokemon-card {
     flex: 1;
     border-radius: 1rem;
     padding: 1.5rem;
@@ -59,10 +290,66 @@
     }
 
     &-image {
+      position: relative;
       width: 10rem;
       height: 10rem;
       margin: 0 auto;
       transition: transform 0.3s;
+
+     
+      &--attacking {
+        animation: attack-forward 0.5s ease-in-out;
+      }
+
+      &--defending {
+        animation: take-hit 0.5s ease-in-out;
+      }
+
+     
+      &--fire-attack::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle, rgba(239, 68, 68, 0.3) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: fire-pulse 0.5s ease-out;
+      }
+
+      &--water-attack::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: water-ripple 0.8s ease-out;
+      }
+
+      &--electric-attack::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle, rgba(234, 179, 8, 0.3) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: electric-zap 0.3s ease-out;
+      }
+
+      &--grass-attack::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle, rgba(34, 197, 94, 0.3) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: grass-grow 0.8s ease-out;
+      }
+
+      &--normal-attack::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: normal-impact 0.5s ease-out;
+      }
 
       &:hover {
         transform: scale(1.1);
@@ -70,15 +357,42 @@
     }
 
     &-name {
-      font-size: 1.5rem;
-      font-weight: bold;
+      font-family: 'Bangers', cursive;
+      font-size: 2rem;
       text-align: center;
       text-transform: capitalize;
       color: white;
-      margin-bottom: 1rem;
+      margin: 1rem 0;
+      letter-spacing: 2px;
+      text-shadow: 
+        2px 2px 0 rgba(0, 0, 0, 0.5),
+        -1px -1px 0 rgba(0, 0, 0, 0.5),
+        1px -1px 0 rgba(0, 0, 0, 0.5),
+        -1px 1px 0 rgba(0, 0, 0, 0.5);
+      transition: all 0.3s ease;
     }
-
-    &-hp {
+    &:hover {
+      transform: scale(1.05);
+      color: #FFDE00;
+    }
+    @keyframes title-glow {
+      0%, 100% {
+        text-shadow: 
+          4px 4px 0 #2563eb,
+          -2px -2px 0 #2563eb,
+          2px -2px 0 #2563eb,
+          -2px 2px 0 #2563eb;
+      }
+      50% {
+        text-shadow: 
+          4px 4px 20px #3b82f6,
+          -2px -2px 0 #3b82f6,
+          2px -2px 0 #3b82f6,
+          -2px 2px 0 #3b82f6;
+      }
+    }
+  }
+    .battle-arena__pokemon-card-hp {
       margin-bottom: 1.5rem;
 
       &-text {
@@ -115,7 +429,7 @@
       }
     }
 
-    &-moves {
+    .battle-arena__pokemon-card-moves {
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
@@ -143,285 +457,169 @@
         }
       }
     }
-  }
 
-  &__vs {
-    text-align: center;
-
-    &-text {
-      font-size: 4rem;
-      font-weight: bold;
-      color: #ef4444;
-      margin-bottom: 1.5rem;
-      animation: pulse 2s infinite;
+  @keyframes sparkle-fade {
+    0%, 100% {
+      opacity: 0;
+      transform: scale(0);
     }
-
-    &-button {
-      padding: 0.75rem 1.5rem;
-      background: rgba(99, 102, 241, 0.3);
-      backdrop-filter: blur(8px);
-      color: white;
-      border-radius: 0.5rem;
-      transition: all 0.2s;
-
-      &:hover {
-        background: rgba(99, 102, 241, 0.5);
-        transform: scale(1.05);
-      }
+    50% {
+      opacity: 1;
+      transform: scale(1);
     }
   }
 
-  &__battle-log {
-    max-width: 800px;
-    margin: 0 auto;
-    border-radius: 1rem;
-    padding: 1.5rem;
-    background: rgba(99, 102, 241, 0.3);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-
-    &-title {
-      font-size: 1.25rem;
-      font-weight: bold;
-      color: white;
-      margin-bottom: 1rem;
+  @keyframes float-up {
+    0% {
+      transform: translateY(100%) translateX(0);
+      opacity: 1;
     }
-
-    &-container {
-      max-height: 10rem;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    &-entry {
-      padding: 0.5rem 1rem;
-      color: #d1d5db;
-      border-radius: 0.5rem;
-      background: rgba(99, 102, 241, 0.3);
-      backdrop-filter: blur(8px);
-      transition: background 0.3s;
-
-      &:hover {
-        background: rgba(99, 102, 241, 0.5);
-      }
+    100% {
+      transform: translateY(-100%) translateX(20px);
+      opacity: 0;
     }
   }
 
-  &__new-game {
-    margin-top: 2rem;
-    padding: 1rem 2rem;
-    font-size: 1.125rem;
-    font-weight: bold;
-    color: white;
-    border-radius: 0.5rem;
-    background: linear-gradient(to right, #059669, #10b981);
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    transition: all 0.2s;
-
-    &:hover {
-      background: linear-gradient(to right, #10b981, #34d399);
-      transform: scale(1.05);
+  @keyframes attack-flash {
+    0%, 100% {
+      opacity: 0;
     }
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
-}
-
-// BattleList.scss
-.battle-container {
-  min-height: 100vh;
-  color: white;
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(to right, #6366f1, #4f46e5);
-
-  &__background-pattern {
-    position: absolute;
-    inset: 0;
-    background-image: url('/pokeball-pattern.png');
-    opacity: 0.05;
-    pointer-events: none;
-  }
-
-  &__decorative-line {
-    height: 0.5rem;
-    background: linear-gradient(to right, #4f46e5, #7e22ce, #ec4899);
-  }
-
-  .battle-title {
-    color: #FFDE00;
-    font-size: 2.5rem;
-    text-align: center;
-    margin: 2rem 0;
-    font-weight: bold;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-  }
-
-  .content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
-    position: relative;
-    z-index: 10;
-  }
-
-  .control-panel {
-    margin-bottom: 2rem;
-    background: rgba(99, 102, 241, 0.3);
-    backdrop-filter: blur(8px);
-    padding: 1rem;
-    border-radius: 0.75rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transform-origin: top;
-    animation: slideDown 0.5s ease-out;
-  }
-}
-
-.battle-card {
-  background: rgba(99, 102, 241, 0.3);
-  backdrop-filter: blur(8px);
-  border-radius: 12px;
-  padding: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
-  color: white;
-
-  &.selected {
-    border-color: #FFDE00;
-    box-shadow: 0 0 15px rgba(255, 222, 0, 0.3);
-  }
-
-  .pokemon-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-
-  .pokemon-id {
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.6);
-  }
-
-  .pokemon-image-container {
-    display: flex;
-    justify-content: center;
-    padding: 1rem;
-    margin: 1rem 0;
-    background: rgba(99, 102, 241, 0.3);
-    border-radius: 8px;
-
-    .pokemon-image {
-      width: 120px;
-      height: 120px;
-      object-fit: contain;
+    50% {
+      opacity: 0.5;
     }
   }
 
-  .pokemon-name {
-    text-align: center;
-    font-size: 1.4rem;
-    color: white;
-    text-transform: capitalize;
-    margin-bottom: 1rem;
-  }
-
-  .stats-container {
-    margin: 1rem 0;
-    background: rgba(99, 102, 241, 0.3);
-    border-radius: 8px;
-    padding: 1rem;
-
-    .stat-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.5rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-
-      .stat-name {
-        color: rgba(255, 255, 255, 0.6);
-      }
-
-      .stat-value {
-        color: white;
-        font-weight: bold;
-      }
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
     }
   }
 
-  .battle-info {
-    .section {
-      margin-top: 1rem;
-      padding: 0.8rem;
-      background: rgba(99, 102, 241, 0.3);
-      border-radius: 8px;
-
-      .section-title {
-        font-weight: bold;
-        margin-bottom: 0.5rem;
-        color: #FFDE00;
-      }
+  @keyframes attack-forward {
+    0% {
+      transform: translateX(0) rotate(0);
     }
-
-    .type-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
+    25% {
+      transform: translateX(30px) rotate(5deg);
+    }
+    75% {
+      transform: translateX(-5px) rotate(-2deg);
+    }
+    100% {
+      transform: translateX(0) rotate(0);
     }
   }
 
-  .type-badge {
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    color: white;
-    text-transform: capitalize;
+  @keyframes take-hit {
+    0% {
+      transform: translateX(0);
+      filter: brightness(1);
+    }
+    25% {
+      transform: translateX(-20px);
+      filter: brightness(1.5);
+    }
+    50% {
+      transform: translateX(10px);
+      filter: brightness(1.2);
+    }
+    100% {
+      transform: translateX(0);
+      filter: brightness(1);
+    }
   }
-}
 
-@keyframes slideDown {
-  from {
-    transform: scaleY(0);
-    opacity: 0;
+  @keyframes fire-pulse {
+    0% {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
   }
-  to {
-    transform: scaleY(1);
-    opacity: 1;
-  }
-}
 
+  @keyframes water-ripple {
+    0% {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.1);
+      opacity: 0.5;
+    }
+    100% {
+      transform: scale(1.4);
+      opacity: 0;
+    }
+  }
+
+  @keyframes electric-zap {
+    0% {
+      transform: scale(1);
+      opacity: 0;
+    }
+    25% {
+      transform: scale(1.2);
+      opacity: 0.8;
+    }
+    50% {
+      transform: scale(0.9);
+      opacity: 0.5;
+    }
+    75% {
+      transform: scale(1.1);
+      opacity: 0.7;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0;
+    }
+  }
+
+  @keyframes grass-grow {
+    0% {
+      transform: scale(0.8) rotate(0deg);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.2) rotate(180deg);
+      opacity: 0.7;
+    }
+    100% {
+      transform: scale(1.5) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+  @keyframes normal-impact {
+    0% {
+      transform: scale(0.9);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.1);
+      opacity: 0.6;
+    }
+    100% {
+      transform: scale(1.3);
+      opacity: 0;
+    }
+  }
 @media (max-width: 768px) {
-  .battle-container {
-    .content {
-      padding: 1rem;
-    }
-    .control-panel {
-      padding: 0.75rem;
-    }
-    .battle-title {
-      font-size: 2rem;
-      margin: 1.5rem 0;
-    }
-  }
-
-  .battle-card {
-    padding: 1rem;
-    .pokemon-image-container .pokemon-image {
-      width: 100px;
-      height: 100px;
+  .battle-arena {
+    .battle-container {
+      .content {
+        padding: 1rem;
+      }
     }
   }
 }

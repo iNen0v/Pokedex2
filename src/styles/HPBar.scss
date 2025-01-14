@@ -1,0 +1,31 @@
+.hp-bar {
+  width: 100%;
+  background: #2a2a2a;
+  border-radius: 4px;
+  padding: 2px;
+  margin: 4px 0;
+
+  &__fill {
+    height: 8px;
+    border-radius: 2px;
+    transition: width 0.3s ease-in-out;
+    
+    &--high {
+      background: #38ef7d;
+    }
+    
+    &--medium {
+      background: #ffd700;
+    }
+    
+    &--low {
+      background: #ff4136;
+    }
+  }
+
+  &__text {
+    font-size: 14px;
+    color: #fff;
+    margin-bottom: 2px;
+  }
+}

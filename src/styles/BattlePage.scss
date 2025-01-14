@@ -299,14 +299,14 @@
   }
 }
 .battle-controls-wrapper {
-  position: fixed; // Вместо sticky за по-добра видимост
+  position: fixed; 
   bottom: 20px;
   z-index: 1000;
   width: 100%;
   display: flex;
   justify-content: center;
   padding: 1rem;
-  background: rgba(0, 0, 0, 0.7); // Повече контраст
+  background: rgba(0, 0, 0, 0.7); 
   backdrop-filter: blur(10px);
 }
 

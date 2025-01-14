@@ -1,0 +1,55 @@
+.arena-card {
+  background: rgba(22, 25, 37, 0.9);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 8px 0;
+  
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  &__sprite {
+    width: 48px;
+    height: 48px;
+    image-rendering: pixelated;
+  }
+
+  &__info {
+    flex: 1;
+  }
+
+  &__name {
+    font-size: 18px;
+    color: #fff;
+    margin-bottom: 4px;
+    text-transform: lowercase;
+  }
+
+  &__types {
+    display: flex;
+    gap: 8px;
+  }
+
+  &__type {
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: 600;
+
+    &--grass {
+      background: #78c850;
+    }
+
+    &--poison {
+      background: #a040a0;
+    }
+
+    &--fire {
+      background: #f08030;
+    }
+  }
+}
