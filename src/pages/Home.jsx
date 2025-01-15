@@ -34,8 +34,6 @@ function Home() {
   const [sortBy, setSortBy] = useState('id');
   const [filters, setFilters] = useState({
     types: [],
-    minAttack: '',
-    minDefense: '',
     showRare: false
   });
   const [searchQuery, setSearchQuery] = useState('');
@@ -61,18 +59,6 @@ function Home() {
       );
     }
 
-    if (filters.minAttack) {
-      filtered = filtered.filter(pokemon =>
-        pokemon.stats[1].base_stat >= parseInt(filters.minAttack)
-      );
-    }
-
-    if (filters.minDefense) {
-      filtered = filtered.filter(pokemon =>
-        pokemon.stats[2].base_stat >= parseInt(filters.minDefense)
-      );
-    }
-
     if (filters.showRare) {
       filtered = filtered.filter(pokemon => 
         pokemon.stats.reduce((sum, stat) => sum + stat.base_stat, 0) >= 500
@@ -80,16 +66,8 @@ function Home() {
     }
 
     return filtered.sort((a, b) => {
-      switch(sortBy) {
-        case 'name':
-          return a.name.localeCompare(b.name);
-        case 'attack':
-          return b.stats[1].base_stat - a.stats[1].base_stat;
-        case 'defense':
-          return b.stats[2].base_stat - a.stats[2].base_stat;
-        default:
-          return a.id - b.id;
-      }
+      if (sortBy === 'name') return a.name.localeCompare(b.name);
+      return a.id - b.id;
     });
   };
 
@@ -98,48 +76,37 @@ function Home() {
   return (
     <div className="pokemon-home">
       <div className="pokemon-home__background-pattern" />
-      <div className="pokemon-home__decorative-line" />
+      <div className="pokemon-home__content">
+        <motion.div 
+          className="pokemon-home__logo-container"
+          initial={{ y: -50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8, type: "spring" }}
+        >
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/9/98/International_Pok%C3%A9mon_logo.svg"
+            alt="Pokemon Logo"
+            className="pokemon-home__logo"
+          />
+        </motion.div>
 
-      <motion.div 
-        className="pokemon-home__logo-container"
-        initial={{ y: -50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, type: "spring" }}
-      >
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/9/98/International_Pok%C3%A9mon_logo.svg"
-          alt="Pokemon Logo"
-          className="pokemon-home__logo"
-        />
-      </motion.div>
-
-      <motion.div 
-        className="pokemon-home__content"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
-      >
         <div className="pokemon-home__control-panel">
-          <div className="pokemon-home__controls">
-            <SearchBar 
-              pokemons={pokemons} 
-              onSelect={(pokemon) => {
-                console.log(`Selected Pokemon: ${pokemon.name}`);
-              }}
-            />
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="pokemon-home__select"
-            >
-              <option value="id">Number</option>
-              <option value="name">Name</option>
-              <option value="attack">Attack</option>
-              <option value="defense">Defense</option>
-            </select>
+          <SearchBar 
+            pokemons={pokemons} 
+            onSelect={(pokemon) => {
+              setSearchQuery(pokemon.name);
+            }}
+          />
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="pokemon-home__select"
+          >
+            <option value="id">Number</option>
+            <option value="name">Name</option>
+          </select>
 
-            <Filters filters={filters} setFilters={setFilters} />
-          </div>
+          <Filters filters={filters} setFilters={setFilters} />
         </div>
 
         <AnimatePresence mode="wait">
@@ -160,7 +127,7 @@ function Home() {
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.div>
+      </div>
     </div>
   );
 }

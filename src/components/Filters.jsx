@@ -29,6 +29,27 @@ const typeColors = {
   fairy: '#EE99AC'
 };
 
+const typeIcons = {
+  normal: '⚪',
+  fire: '🔥',
+  water: '💧',
+  grass: '🌿',
+  electric: '⚡',
+  ice: '❄️',
+  fighting: '👊',
+  poison: '☠️',
+  ground: '🌍',
+  flying: '🦅',
+  psychic: '🔮',
+  bug: '🐛',
+  rock: '🪨',
+  ghost: '👻',
+  dragon: '🐉',
+  dark: '🌑',
+  steel: '⚔️',
+  fairy: '✨'
+};
+
 function getTypeButtonStyle(type, isActive) {
   return {
     backgroundColor: isActive ? typeColors[type] : `${typeColors[type]}30`,
@@ -41,8 +62,6 @@ function Filters({ filters, setFilters }) {
   const handleClearFilters = () => {
     setFilters({
       types: [],
-      minAttack: '',
-      minDefense: '',
       showRare: false
     });
   };
@@ -55,11 +74,7 @@ function Filters({ filters, setFilters }) {
     setFilters({ ...filters, types: newTypes });
   };
 
-  const hasActiveFilters = 
-    filters.types.length > 0 || 
-    filters.minAttack || 
-    filters.minDefense || 
-    filters.showRare;
+  const hasActiveFilters = filters.types.length > 0 || filters.showRare;
 
   return (
     <motion.div 
@@ -74,7 +89,7 @@ function Filters({ filters, setFilters }) {
             className={`filters__quick-btn ${filters.showRare ? 'active' : ''}`}
             onClick={() => setFilters({ ...filters, showRare: !filters.showRare })}
           >
-            Rare Pokémon
+            ⭐ Rare Pokémon
           </button>
           <button 
             className="filters__quick-btn"
@@ -83,7 +98,7 @@ function Filters({ filters, setFilters }) {
               types: ['dragon', 'psychic'] 
             })}
           >
-            Legendary Types
+            🌟 Legendary Types
           </button>
           <button 
             className="filters__quick-btn"
@@ -92,7 +107,7 @@ function Filters({ filters, setFilters }) {
               types: ['fire', 'water', 'grass'] 
             })}
           >
-            Starter Types
+            🌱 Starter Types
           </button>
         </div>
 
@@ -104,31 +119,11 @@ function Filters({ filters, setFilters }) {
               className={`filters__type-button ${filters.types.includes(type) ? 'active' : ''}`}
               style={getTypeButtonStyle(type, filters.types.includes(type))}
             >
-              <span>{type}</span>
+              <span className="type-icon">{typeIcons[type]}</span>
+              <span className="type-name">{type}</span>
             </button>
           ))}
         </div>
-      </div>
-
-      <div className="filters__stats">
-        {[
-          { label: 'Attack', key: 'minAttack', color: '#ef4444' },
-          { label: 'Defense', key: 'minDefense', color: '#3b82f6' }
-        ].map(stat => (
-          <div key={stat.key} className="filters__stat-row">
-            <label>{stat.label}: {filters[stat.key] || 0}</label>
-            <input
-              type="range"
-              min="0"
-              max="150"
-              value={filters[stat.key] || 0}
-              onChange={(e) => setFilters({ ...filters, [stat.key]: e.target.value })}
-              style={{
-                background: `linear-gradient(to right, ${stat.color} ${(filters[stat.key] || 0) / 1.5}%, rgba(55, 65, 81, 0.8) ${(filters[stat.key] || 0) / 1.5}%)`
-              }}
-            />
-          </div>
-        ))}
       </div>
 
       {hasActiveFilters && (
@@ -146,7 +141,7 @@ function Filters({ filters, setFilters }) {
             ease: "easeInOut"
           }}
         >
-          Clear All Filters
+          🔄 Clear All Filters
         </motion.button>
       )}
     </motion.div>
