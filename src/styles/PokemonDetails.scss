@@ -67,54 +67,54 @@ $pokemon-white: #FFFFFF;
     gap: 2rem;
     margin-bottom: 1rem;
 
-    img {
-      width: 200px;
-      height: 200px;
-      object-fit: contain;
-      filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.2));
-      transition: transform 0.3s ease;
+    .sprite-container {
+      position: relative;
+      text-align: center;
 
-      &:hover {
-        transform: scale(1.1);
+      img {
+        width: 200px;
+        height: 200px;
+        object-fit: contain;
+        filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.2));
+        transition: transform 0.3s ease;
+
+        &:hover {
+          transform: scale(1.1);
+        }
       }
-    }
-  }
 
-  &__shiny {
-    text-align: center;
-    margin-top: 2rem;
-    padding: 2rem;
-    background: rgba($pokemon-gold, 0.2);
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      .shiny-toggle {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        padding: 6px 12px;
+        background: linear-gradient(135deg, #FFD700, #FFA500);
+        border: none;
+        border-radius: 20px;
+        color: white;
+        font-weight: bold;
+        font-size: 0.9rem;
+        cursor: pointer;
+        box-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        
+        &::before {
+          content: '✨';
+          margin-right: 4px;
+        }
 
-    h3 {
-      color: $pokemon-yellow;
-      font-size: 1.5rem;
-      text-transform: uppercase;
-      margin-bottom: 1rem;
-      letter-spacing: 2px;
-    }
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5);
+          background: linear-gradient(135deg, #FFE55C, #FFB347);
+        }
 
-    img {
-      width: 150px;
-      height: 150px;
-      object-fit: contain;
-      margin: 0 auto;
-      display: block;
-      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4));
-      transition: transform 0.3s ease;
-
-      &:hover {
-        transform: scale(1.2);
+        &:active {
+          transform: translateY(0);
+        }
       }
-    }
-
-    .shiny-description {
-      color: $pokemon-white;
-      margin-top: 1rem;
-      font-size: 1rem;
-      line-height: 1.4;
     }
   }
 
@@ -188,68 +188,6 @@ $pokemon-white: #FFFFFF;
   }
 }
 
-.evolution-chain {
-  margin-top: 2rem;
-  padding: 2rem;
-  background: rgba($pokemon-blue, 0.1);
-  border-radius: 12px;
-
-  h3 {
-    color: $pokemon-yellow;
-    text-align: center;
-    margin-bottom: 2rem;
-    font-size: 1.4rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  .evolution-stages {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-
-    .evolution-stage {
-      background: rgba($pokemon-white, 0.1);
-      padding: 1rem;
-      border-radius: 12px;
-      text-align: center;
-      min-width: 150px;
-      transition: transform 0.3s ease;
-
-      &:hover {
-        transform: scale(1.05);
-      }
-
-      img {
-        width: 150px;
-        height: 150px;
-        margin-bottom: 0.5rem;
-        filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
-      }
-
-      .pokemon-name {
-        color: $pokemon-white;
-        font-size: 1.1rem;
-        text-transform: capitalize;
-      }
-
-      .evolution-details {
-        color: $pokemon-yellow;
-        font-size: 0.9rem;
-        margin-top: 0.5rem;
-      }
-    }
-
-    .evolution-arrow {
-      color: $pokemon-yellow;
-      font-size: 2rem;
-      margin: 0 1rem;
-    }
-  }
-}
-
 .type-badge {
   display: inline-block;
   padding: 0.8rem 1.8rem;
@@ -260,6 +198,7 @@ $pokemon-white: #FFFFFF;
   letter-spacing: 1px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   font-size: 1.1rem;
+  color: white;
 }
 
 .abilities-list {
@@ -314,6 +253,21 @@ $pokemon-white: #FFFFFF;
 
 @media (max-width: 768px) {
   .detail-card {
+    padding: 1rem;
+
+    &__title {
+      font-size: 2.5rem;
+    }
+
+    &__sprites {
+      flex-direction: column;
+      align-items: center;
+
+      .sprite-container {
+        margin-bottom: 1rem;
+      }
+    }
+
     &__evolution {
       padding: 1rem;
     }

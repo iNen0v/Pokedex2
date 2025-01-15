@@ -52,7 +52,7 @@ function SearchBar({ pokemons, onSelect }) {
     setSearch('');
     setSuggestions([]);
     setSelectedIndex(-1);
-    onSelect({ name: '' }); // Изпращаме празен обект за да покажем всички покемони
+    onSelect({ name: '' });
   };
 
   const handleInputChange = (e) => {
@@ -61,7 +61,7 @@ function SearchBar({ pokemons, onSelect }) {
     if (value === '') {
       clearSearch();
     } else {
-      onSelect({ name: value }); // Актуализираме търсенето при всяка промяна
+      onSelect({ name: value }); 
     }
   };
 

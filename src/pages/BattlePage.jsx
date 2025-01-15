@@ -77,10 +77,7 @@ function BattlePage() {
 
   const handleStartBattle = () => {
     if (selectedPokemon && opponent) {
-      console.log("Starting battle:", selectedPokemon.id, opponent.id);
       navigate(`/battle-arena/${selectedPokemon.id}/${opponent.id}`);
-    } else {
-      console.log("Cannot start battle: Pokemon not selected", selectedPokemon, opponent);
     }
   };
 
@@ -107,15 +104,27 @@ function BattlePage() {
       </motion.button>
 
       <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="relative mb-6">
-          <input
-            type="text"
-            placeholder="Search for your next champion..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-slate-900/95 text-white placeholder-gray-400 rounded-xl py-3 px-6 outline-none"
-          />
-          <Search className="absolute right-6 top-1/2 transform -translate-y-1/2 text-gray-400" />
+        <div className="search-container">
+          <div className="search-bar">
+            <div className="search-bar__input-container">
+              <input
+                type="text"
+                placeholder="Search for your next champion..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="search-bar__input"
+              />
+              {searchTerm && (
+                <button 
+                  onClick={() => setSearchTerm('')}
+                  className="search-bar__clear-button"
+                >
+                  ×
+                </button>
+              )}
+              <Search className="search-bar__icon" />
+            </div>
+          </div>
         </div>
 
         <ArenaFilters filters={filters} setFilters={setFilters} />

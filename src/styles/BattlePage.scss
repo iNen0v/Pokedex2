@@ -1,3 +1,95 @@
+.battle-page {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+  min-height: 100vh;
+  color: white;
+  position: relative;
+  overflow: hidden;
+
+  &__background-pattern {
+    position: absolute;
+    inset: 0;
+    background-image: url('/pokeball-pattern.png');
+    opacity: 0.05;
+    pointer-events: none;
+  }
+
+  &__decorative-line {
+    height: 0.5rem;
+    background: linear-gradient(to right, #4f46e5, #7e22ce, #ec4899);
+  }
+}
+
+// Нов стил за search bar
+.search-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto 2rem;
+  padding: 0 1rem;
+}
+
+.search-bar {
+  position: relative;
+  width: 100%;
+
+  &__input-container {
+    position: relative;
+    width: 100%;
+  }
+
+  &__input {
+    width: 100%;
+    height: 54px;
+    font-size: 1.1rem;
+    padding: 0 3rem 0 1.5rem;
+    border-radius: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    transition: all 0.2s ease;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    &:focus {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  &__clear-button {
+    position: absolute;
+    right: 2.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+
+    &:hover {
+      color: rgba(255, 255, 255, 0.9);
+    }
+  }
+
+  &__icon {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.5);
+    pointer-events: none;
+  }
+}
+
 .clear-filters-btn {
   padding: 0.5rem 1rem;
   background: rgba(239, 68, 68, 0.5);
@@ -118,101 +210,36 @@
   }
 }
 
-.battle-page {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
-  min-height: 100vh;
+.back-button {
+  margin: 1rem;
+  padding: 0.5rem 1rem;
+  background: rgba(31, 41, 55, 0.5);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(75, 85, 99, 0.4);
+  border-radius: 0.5rem;
   color: white;
-  position: relative;
-  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s;
 
-  &__background-pattern {
-    position: absolute;
-    inset: 0;
-    background-image: url('/pokeball-pattern.png');
-    opacity: 0.05;
-    pointer-events: none;
-  }
-
-  &__decorative-line {
-    height: 0.5rem;
-    background: linear-gradient(to right, #4f46e5, #7e22ce, #ec4899);
-  }
-
-  .search-section {
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 1rem;
-
-    .search-container {
-      width: 100%;
-
-      input {
-        width: 100%;
-        padding: 0.75rem 1rem;
-        border-radius: 9999px;
-        background: rgba(31, 41, 55, 0.5);
-        backdrop-filter: blur(8px);
-        border: 1px solid rgba(75, 85, 99, 0.4);
-        color: white;
-        font-size: 1rem;
-
-        &::placeholder {
-          color: rgba(255, 255, 255, 0.6);
-        }
-
-        &:focus {
-          outline: none;
-          border-color: #FFDE00;
-          box-shadow: 0 0 15px rgba(255, 222, 0, 0.3);
-        }
-      }
-    }
-  }
-
-  .back-button {
-    margin: 1rem;
-    padding: 0.5rem 1rem;
-    background: rgba(31, 41, 55, 0.5);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(75, 85, 99, 0.4);
-    border-radius: 0.5rem;
-    color: white;
-    cursor: pointer;
-    transition: all 0.2s;
-
-    &:hover {
-      background: rgba(75, 85, 99, 0.7);
-      transform: scale(1.05);
-    }
+  &:hover {
+    background: rgba(75, 85, 99, 0.7);
+    transform: scale(1.05);
   }
 }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
 @keyframes shiftGradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .loading-screen {
@@ -262,51 +289,15 @@
   }
 }
 
-.selection-status,
-.battle-controls {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 1rem;
-  z-index: 100;
-  position: relative;
-
-  .battle-button {
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.2s;
-
-    &.start {
-      background-color: #10b981;
-      color: white;
-
-      &:hover {
-        background-color: #059669;
-      }
-    }
-
-    &.cancel {
-      background-color: #ef4444;
-      color: white;
-
-      &:hover {
-        background-color: #dc2626;
-      }
-    }
-  }
-}
 .battle-controls-wrapper {
-  position: fixed; 
+  position: fixed;
   bottom: 20px;
   z-index: 1000;
   width: 100%;
   display: flex;
   justify-content: center;
   padding: 1rem;
-  background: rgba(0, 0, 0, 0.7); 
+  background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(10px);
 }
 
@@ -345,5 +336,14 @@
         transform: translateY(-2px);
       }
     }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
