@@ -4,7 +4,6 @@ import '../styles/BattleLog.scss';
 const BattleLog = ({ logs }) => {
   const logContainerRef = useRef(null);
 
- 
   useEffect(() => {
     if (logContainerRef.current) {
       logContainerRef.current.scrollTop = logContainerRef.current.scrollHeight;
@@ -31,6 +30,9 @@ const BattleLog = ({ logs }) => {
           <div
             key={index}
             className={`battle-log__entry battle-log__entry--${getMessageType(log)}`}
+            style={{
+              animation: `slideIn 0.3s ease-out ${index * 0.1}s both`
+            }}
           >
             {log}
           </div>

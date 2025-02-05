@@ -10,6 +10,8 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",
+    "sass": "^1.83.4",
+    "sass-loader": "^16.0.4",
     "vite": "^6.0.1"
   },
   "dependencies": {
@@ -28,7 +30,6 @@
     "react-router-dom": "^7.0.2",
     "recharts": "^2.15.0",
     "redux": "^5.0.1",
-    "sass": "^1.81.1",
     "use-memo-one": "^1.1.3"
   }
 }
