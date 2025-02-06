@@ -12,7 +12,7 @@ export const BASE_PATH = '/pokedex2-six-psivercel.app';
 function App() {
   return (
     <Provider store={store}>
-      <Router>
+      <Router basename={BASE_PATH}> 
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/pokemon/:id" element={<PokemonDetails />} /> 

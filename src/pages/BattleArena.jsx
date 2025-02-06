@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { BASE_PATH } from '../App';
 import "../styles/BattleArena.scss";
 
 import HPBar from "../components/HPBar";
@@ -29,7 +28,7 @@ const BattleArena = () => {
       setPokemon1({...p1, currentHP: p1.stats[0].base_stat});
       setPokemon2({...p2, currentHP: p2.stats[0].base_stat});
     } else {
-      navigate(`${BASE_PATH}/battle`);
+      navigate("/battle");
     }
   }, [pokemons, pokemon1Id, pokemon2Id, navigate]);
 
@@ -117,7 +116,7 @@ const BattleArena = () => {
       <div className="battle-arena__container">
         <div className="battle-arena__header">
           <button 
-            onClick={() => navigate(`${BASE_PATH}/battle`)} 
+            onClick={() => navigate("/battle")} 
             className="battle-arena__back-button"
           >
             ← Back
@@ -177,7 +176,7 @@ const BattleArena = () => {
             </h2>
             <div className="battle-arena__actions">
               <button
-                onClick={() => navigate(`${BASE_PATH}/battle-arena/${pokemon1.id}/${pokemon2.id}`)}
+                onClick={() => navigate(`/battle-arena/${pokemon1.id}/${pokemon2.id}`)}
                 className="battle-arena__action-button battle-arena__action-button--new"
               >
                 New Battle

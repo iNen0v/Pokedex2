@@ -7,7 +7,6 @@ import { createSelector } from '@reduxjs/toolkit';
 import BattleCard from '../components/BattleCard';
 import ArenaFilters from '../components/ArenaFilters';
 import { fetchPokemons } from '../redux/actions';
-import { BASE_PATH } from '../App';
 import '../styles/BattlePage.scss';
 
 const selectPokemonData = (state) => state.pokemons.data;
@@ -78,7 +77,7 @@ function BattlePage() {
 
   const handleStartBattle = () => {
     if (selectedPokemon && opponent) {
-      navigate(`${BASE_PATH}/battle-arena/${selectedPokemon.id}/${opponent.id}`);
+      navigate(`/battle-arena/${selectedPokemon.id}/${opponent.id}`);
     }
   };
 
@@ -94,7 +93,7 @@ function BattlePage() {
 
       <motion.button
         className="back-button"
-        onClick={() => navigate(`${BASE_PATH}`)}
+        onClick={() => navigate("/")}
         whileHover={{ x: -5 }}
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
