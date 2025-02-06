@@ -7,6 +7,8 @@ import BattleArena from './pages/BattleArena';
 import { Provider } from 'react-redux';
 import store from './redux/store';
 
+export const BASE_PATH = '/pokedex2-six-psivercel.app';
+
 function App() {
   return (
     <Provider store={store}>
