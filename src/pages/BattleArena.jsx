@@ -176,7 +176,7 @@ const BattleArena = () => {
             </h2>
             <div className="battle-arena__actions">
               <button
-                onClick={() => navigate("/battle")}
+                onClick={() => navigate(`/battle-arena/${pokemon1.id}/${pokemon2.id}`)}
                 className="battle-arena__action-button battle-arena__action-button--new"
               >
                 New Battle
