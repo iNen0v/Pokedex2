@@ -10,7 +10,7 @@ import store from './redux/store';
 function App() {
   return (
     <Provider store={store}>
-      <Router basename="/pokedex2-six-psivercel.app">
+      <Router>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/pokemon/:id" element={<PokemonDetails />} />
