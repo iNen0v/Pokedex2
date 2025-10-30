@@ -1,3 +1,5 @@
+import React, { useState } from 'react';
+
 function BattleHistory() {
     const [battles, setBattles] = useState(() => {
       const saved = localStorage.getItem('battleHistory');
@@ -15,7 +17,10 @@ function BattleHistory() {
         <h3>Battle History</h3>
         <div className="battles-list">
           {battles.map((battle, index) => (
-            <div key={index} className="battle-record">
+            <div 
+              key={`${battle?.date || 'battle'}-${battle?.winner?.name || 'unknown'}-${battle?.loser?.name || 'unknown'}-${index}`}
+              className="battle-record"
+            >
               <div className="battle-participants">
                 <span>{battle.winner.name} vs {battle.loser.name}</span>
               </div>

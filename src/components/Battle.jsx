@@ -31,10 +31,13 @@ function Battle({ pokemon1, pokemon2, onClose }) {
 
     // Type effectiveness
     const attackerType = attacker.types[0].type.name;
+    let effectivenessText = '';
     if (defender.types[0].weakTo?.includes(attackerType)) {
       damage *= 2;
+      effectivenessText = "It's super effective!";
     } else if (defender.types[0].resistantTo?.includes(attackerType)) {
       damage *= 0.5;
+      effectivenessText = "It's not very effective...";
     }
 
     damage = Math.max(1, Math.floor(damage));
@@ -55,8 +58,7 @@ function Battle({ pokemon1, pokemon2, onClose }) {
       attacker: attacker.name,
       move: move.move.name,
       damage,
-      effectiveness: damage >= 2 ? "It's super effective!" : 
-                    damage <= 0.5 ? "It's not very effective..." : ""
+      effectiveness: effectivenessText
     }]);
 
     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -156,7 +158,7 @@ function Battle({ pokemon1, pokemon2, onClose }) {
 
       <div className="bg-gray-900 p-4 rounded-lg h-48 overflow-y-auto mb-4">
         {battleLog.map((log, index) => (
-          <div key={index} className="text-white mb-2">
+          <div key={`${log.attacker}-${log.move}-${index}`} className="text-white mb-2">
             <span className="font-bold capitalize">{log.attacker}</span> used{' '}
             <span className="text-blue-400">{log.move}</span> for{' '}
             <span className="text-red-400">{log.damage}</span> damage!
