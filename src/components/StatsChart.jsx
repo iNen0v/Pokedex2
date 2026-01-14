@@ -1,3 +1,4 @@
+import React from 'react';
 import { ResponsiveBar } from '@nivo/bar';
 
 function StatsChart({ stats }) {
@@ -27,3 +28,5 @@ function StatsChart({ stats }) {
     </div>
   );
 }
+
+export default StatsChart;
