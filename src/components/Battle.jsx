@@ -31,12 +31,25 @@ function Battle({ pokemon1, pokemon2, onClose }) {
 
     // Type effectiveness
     const attackerType = attacker.types[0].type.name;
+    const multiplier = defender.types.reduce((acc, defenderType) => {
+      const weakTo = defenderType.weakTo ?? [];
+      const resistantTo = defenderType.resistantTo ?? [];
+
+      if (weakTo.includes(attackerType)) return acc * 2;
+      if (resistantTo.includes(attackerType)) return acc * 0.5;
+      return acc;
+    }, 1);
+
+    damage *= multiplier;
+
     let effectivenessText = '';
-    if (defender.types[0].weakTo?.includes(attackerType)) {
-      damage *= 2;
+    if (multiplier >= 4) {
+      effectivenessText = "It's extremely effective!";
+    } else if (multiplier > 1) {
       effectivenessText = "It's super effective!";
-    } else if (defender.types[0].resistantTo?.includes(attackerType)) {
-      damage *= 0.5;
+    } else if (multiplier <= 0.25) {
+      effectivenessText = "It's barely effective...";
+    } else if (multiplier < 1) {
       effectivenessText = "It's not very effective...";
     }
 
