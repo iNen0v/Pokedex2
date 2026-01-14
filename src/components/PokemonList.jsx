@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useMemo, useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
@@ -56,13 +56,14 @@ function PokemonList({ pokemons, onPokemonSelect, selectedPokemonId, battleMode,
   const loaderRef = useRef(null);
   const ITEMS_PER_BATCH = 12;
 
-  const displayedPokemons = showFavorites
-    ? pokemons.filter(pokemon => favorites.includes(pokemon.id))
-    : pokemons;
+  const displayedPokemons = useMemo(() => {
+    if (!showFavorites) return pokemons;
+    return pokemons.filter(pokemon => favorites.includes(pokemon.id));
+  }, [showFavorites, pokemons, favorites]);
 
   useEffect(() => {
     setVisiblePokemons(displayedPokemons.slice(0, ITEMS_PER_BATCH));
-  }, [showFavorites, pokemons]);
+  }, [displayedPokemons]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
