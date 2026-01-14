@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import PokemonInfo from './PokemonInfo';
 
@@ -10,6 +10,15 @@ function Battle({ pokemon1, pokemon2, onClose }) {
   const [pokemon2Health, setPokemon2Health] = useState(100);
   const [winner, setWinner] = useState(null);
   const [isAttacking, setIsAttacking] = useState(false);
+  
+  const mounted = useRef(true);
+
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
 
   console.log('Battle component rendering with:', { pokemon1, pokemon2 });
 
@@ -25,9 +34,13 @@ function Battle({ pokemon1, pokemon2, onClose }) {
     const defender = currentTurn === 1 ? pokemon2 : pokemon1;
     
     // Calculate damage based on types and stats
-    const attackerStat = attacker.stats.find(s => s.stat.name === 'attack').base_stat;
-    const defenderStat = defender.stats.find(s => s.stat.name === 'defense').base_stat;
-    let damage = Math.floor(attackerStat * (1 - defenderStat / 200));
+    const attackerStat = attacker.stats.find(s => s.stat.name === 'attack')?.base_stat || 50;
+    const defenderStat = defender.stats.find(s => s.stat.name === 'defense')?.base_stat || 50;
+    
+    // Improved damage formula:
+    // Uses a standard reduction formula where damage = Attack * (Factor / (Factor + Defense))
+    // This prevents negative damage while scaling appropriately with defense
+    let damage = Math.floor(attackerStat * (200 / (200 + defenderStat)) * 1.5);
 
     // Type effectiveness
     const attackerType = attacker.types[0].type.name;
@@ -62,8 +75,14 @@ function Battle({ pokemon1, pokemon2, onClose }) {
     }]);
 
     await new Promise(resolve => setTimeout(resolve, 1000));
-    setIsAttacking(false);
-    setCurrentTurn(currentTurn === 1 ? 2 : 1);
+    
+    if (mounted.current) {
+      setIsAttacking(false);
+      // Only switch turn if no winner yet
+      if (!winner && (currentTurn === 1 ? pokemon2Health > damage : pokemon1Health > damage)) {
+          setCurrentTurn(currentTurn === 1 ? 2 : 1);
+      }
+    }
   };
 
   if (battleView === 'pre-battle') {

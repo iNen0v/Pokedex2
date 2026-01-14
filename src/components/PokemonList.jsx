@@ -73,12 +73,6 @@ function PokemonList({ pokemons, onPokemonSelect, selectedPokemonId, battleMode,
               ...prev,
               ...displayedPokemons.slice(prev.length, prev.length + ITEMS_PER_BATCH)
             ];
-            requestAnimationFrame(() => {
-              window.scrollTo({
-                top: window.scrollY - 100,
-                behavior: 'smooth'
-              });
-            });
             return newPokemons;
           });
         }

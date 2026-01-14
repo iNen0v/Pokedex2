@@ -12,6 +12,40 @@ const initialState = {
   pokemonCount: 0
 };
 
+const getStat = (pokemon, statName) => {
+  const stat = pokemon.stats.find(s => s.stat.name === statName);
+  return stat ? stat.base_stat : 0;
+};
+
+const applyFilters = (state) => {
+  if (state.data.length > 0) {
+    state.filteredData = state.data.filter(pokemon => {
+      // Type filter
+      if (state.types.length > 0) {
+        const pokemonTypes = pokemon.types.map(t => t.type.name);
+        const hasMatchingType = state.types.some(type => pokemonTypes.includes(type));
+        if (!hasMatchingType) return false;
+      }
+
+      // Attack filter
+      if (state.attackFilter > 0) {
+        const attackStat = getStat(pokemon, 'attack');
+        if (attackStat < state.attackFilter) return false;
+      }
+
+      // Defense filter
+      if (state.defenseFilter > 0) {
+        const defenseStat = getStat(pokemon, 'defense');
+        if (defenseStat < state.defenseFilter) return false;
+      }
+
+      return true;
+    });
+
+    state.pokemonCount = state.filteredData.length;
+  }
+};
+
 const pokemonSlice = createSlice({
   name: 'pokemons',
   initialState,
@@ -19,95 +53,17 @@ const pokemonSlice = createSlice({
     setTypeFilter: (state, action) => {
       const newTypes = Array.isArray(action.payload) ? action.payload : [action.payload];
       state.types = newTypes;
-      
-      if (state.data.length > 0) {
-        state.filteredData = state.data.filter(pokemon => {
-          // Type filter
-          if (state.types.length > 0) {
-            const pokemonTypes = pokemon.types.map(t => t.type.name);
-            const hasMatchingType = state.types.some(type => pokemonTypes.includes(type));
-            if (!hasMatchingType) return false;
-          }
-
-          // Attack filter
-          if (state.attackFilter > 0) {
-            const attackStat = pokemon.stats[1].base_stat;
-            if (attackStat < state.attackFilter) return false;
-          }
-
-          // Defense filter
-          if (state.defenseFilter > 0) {
-            const defenseStat = pokemon.stats[2].base_stat;
-            if (defenseStat < state.defenseFilter) return false;
-          }
-
-          return true;
-        });
-
-        state.pokemonCount = state.filteredData.length;
-      }
+      applyFilters(state);
     },
 
     setAttackFilter: (state, action) => {
       state.attackFilter = action.payload;
-      
-      if (state.data.length > 0) {
-        state.filteredData = state.data.filter(pokemon => {
-          // Type filter
-          if (state.types.length > 0) {
-            const pokemonTypes = pokemon.types.map(t => t.type.name);
-            const hasMatchingType = state.types.some(type => pokemonTypes.includes(type));
-            if (!hasMatchingType) return false;
-          }
-
-          // Attack filter
-          if (state.attackFilter > 0) {
-            const attackStat = pokemon.stats[1].base_stat;
-            if (attackStat < state.attackFilter) return false;
-          }
-
-          // Defense filter
-          if (state.defenseFilter > 0) {
-            const defenseStat = pokemon.stats[2].base_stat;
-            if (defenseStat < state.defenseFilter) return false;
-          }
-
-          return true;
-        });
-
-        state.pokemonCount = state.filteredData.length;
-      }
+      applyFilters(state);
     },
 
     setDefenseFilter: (state, action) => {
       state.defenseFilter = action.payload;
-      
-      if (state.data.length > 0) {
-        state.filteredData = state.data.filter(pokemon => {
-          // Type filter
-          if (state.types.length > 0) {
-            const pokemonTypes = pokemon.types.map(t => t.type.name);
-            const hasMatchingType = state.types.some(type => pokemonTypes.includes(type));
-            if (!hasMatchingType) return false;
-          }
-
-          // Attack filter
-          if (state.attackFilter > 0) {
-            const attackStat = pokemon.stats[1].base_stat;
-            if (attackStat < state.attackFilter) return false;
-          }
-
-          // Defense filter
-          if (state.defenseFilter > 0) {
-            const defenseStat = pokemon.stats[2].base_stat;
-            if (defenseStat < state.defenseFilter) return false;
-          }
-
-          return true;
-        });
-
-        state.pokemonCount = state.filteredData.length;
-      }
+      applyFilters(state);
     },
 
     clearFilters: (state) => {
@@ -128,8 +84,13 @@ const pokemonSlice = createSlice({
       .addCase(fetchPokemons.fulfilled, (state, action) => {
         state.loading = false;
         state.data = action.payload;
-        state.filteredData = action.payload;
-        state.pokemonCount = action.payload.length;
+        // Apply existing filters if any, otherwise just set all
+        if (state.types.length > 0 || state.attackFilter > 0 || state.defenseFilter > 0) {
+            applyFilters(state);
+        } else {
+            state.filteredData = action.payload;
+            state.pokemonCount = action.payload.length;
+        }
       })
       .addCase(fetchPokemons.rejected, (state, action) => {
         state.loading = false;
