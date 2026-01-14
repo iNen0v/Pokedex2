@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import BattleCard from '../components/BattleCard';
 import Battle from '../components/Battle';
 
@@ -6,46 +6,28 @@ const BattleSelect = ({ pokemons }) => {
   const [selectedPokemons, setSelectedPokemons] = useState([]);
   const [showBattle, setShowBattle] = useState(false);
 
-  // Логваме всяка промяна в избраните покемони
-  useEffect(() => {
-    console.log('Updated selectedPokemons:', selectedPokemons);
-  }, [selectedPokemons]);
-
   const handlePokemonSelect = (pokemon) => {
-    console.log('handlePokemonSelect called with:', pokemon);
-
     if (selectedPokemons.find(p => p.id === pokemon.id)) {
-      console.log('Pokemon already selected, removing:', pokemon.name);
       setSelectedPokemons(prev => prev.filter(p => p.id !== pokemon.id));
     } else if (selectedPokemons.length < 2) {
-      console.log('Adding Pokemon to selection:', pokemon.name);
       setSelectedPokemons(prev => [...prev, pokemon]);
-    } else {
-      console.log('Cannot select more than 2 Pokemons');
     }
-
-    console.log('Selected Pokemons after update:', selectedPokemons);
   };
 
   const handleStartBattle = () => {
-    console.log('Starting battle with:', selectedPokemons);
     setShowBattle(true);
   };
 
   const handleCancelSelection = () => {
-    console.log('Cancelling selection');
     setSelectedPokemons([]);
   };
 
   const handleCloseBattle = () => {
-    console.log('Closing battle');
     setShowBattle(false);
     setSelectedPokemons([]);
   };
 
-  // Логваме стартиране на битка
   if (showBattle && selectedPokemons.length === 2) {
-    console.log('Rendering Battle component with:', selectedPokemons);
     return (
       <Battle
         pokemon1={selectedPokemons[0]}
@@ -79,7 +61,6 @@ const BattleSelect = ({ pokemons }) => {
           <div
             key={pokemon.id}
             onClick={() => {
-              console.log('Clicked on Pokemon:', pokemon);
               handlePokemonSelect(pokemon);
             }}
             className="cursor-pointer"

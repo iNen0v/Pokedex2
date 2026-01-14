@@ -11,8 +11,6 @@ function Battle({ pokemon1, pokemon2, onClose }) {
   const [winner, setWinner] = useState(null);
   const [isAttacking, setIsAttacking] = useState(false);
 
-  console.log('Battle component rendering with:', { pokemon1, pokemon2 });
-
   const handleStartBattle = () => {
     setBattleView('battle');
   };
@@ -92,7 +90,6 @@ function Battle({ pokemon1, pokemon2, onClose }) {
           <div className="text-6xl font-bold text-red-500 animate-pulse px-8">
             VS
           </div>
-
          
           <div className="text-center p-4 bg-gray-700 rounded-lg">
             <img 
