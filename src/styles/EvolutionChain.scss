@@ -31,6 +31,20 @@
     text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
   }
 
+  .evolution-stage-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+
+    &.branched {
+      background: rgba(255, 215, 0, 0.05);
+      padding: 1rem;
+      border-radius: 1rem;
+      border: 1px dashed rgba(255, 215, 0, 0.2);
+    }
+  }
+
   .evolution-stage {
     background: rgba(0, 0, 0, 0.3);
     padding: 1.5rem;
@@ -97,6 +111,16 @@
     .evolution-arrow {
       transform: rotate(90deg);
       margin: 1rem 0;
+    }
+
+    .evolution-stage-group {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+
+      &.branched {
+        padding: 0.75rem;
+      }
     }
 
     .evolution-stage {

@@ -8,7 +8,7 @@ function SearchBar({ pokemons, onSelect }) {
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
   useEffect(() => {
-    if (search.length >= 2) {
+    if (search.length >= 2 && Array.isArray(pokemons)) {
       const filtered = pokemons
         .filter(p => p.name.toLowerCase().includes(search.toLowerCase()))
         .slice(0, 5);

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
@@ -54,44 +54,54 @@ function PokemonList({ pokemons, onPokemonSelect, selectedPokemonId, battleMode,
   const [showFavorites, setShowFavorites] = useState(false);
   const [visiblePokemons, setVisiblePokemons] = useState([]);
   const loaderRef = useRef(null);
+  const displayedPokemonsRef = useRef([]);
   const ITEMS_PER_BATCH = 12;
 
   const displayedPokemons = showFavorites
     ? pokemons.filter(pokemon => favorites.includes(pokemon.id))
     : pokemons;
 
+  // Keep ref updated with current displayedPokemons to avoid stale closures
+  useEffect(() => {
+    displayedPokemonsRef.current = displayedPokemons;
+  }, [displayedPokemons]);
+
   useEffect(() => {
     setVisiblePokemons(displayedPokemons.slice(0, ITEMS_PER_BATCH));
   }, [showFavorites, pokemons]);
 
+  // Stable callback for loading more items
+  const loadMore = useCallback(() => {
+    setVisiblePokemons(prev => {
+      const currentDisplayed = displayedPokemonsRef.current;
+      if (prev.length >= currentDisplayed.length) {
+        return prev;
+      }
+      return [
+        ...prev,
+        ...currentDisplayed.slice(prev.length, prev.length + ITEMS_PER_BATCH)
+      ];
+    });
+  }, []);
+
+  // IntersectionObserver setup - only recreated when loaderRef changes
   useEffect(() => {
+    const currentLoader = loaderRef.current;
+    if (!currentLoader) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && visiblePokemons.length < displayedPokemons.length) {
-          setVisiblePokemons(prev => {
-            const newPokemons = [
-              ...prev,
-              ...displayedPokemons.slice(prev.length, prev.length + ITEMS_PER_BATCH)
-            ];
-            requestAnimationFrame(() => {
-              window.scrollTo({
-                top: window.scrollY - 100,
-                behavior: 'smooth'
-              });
-            });
-            return newPokemons;
-          });
+        if (entries[0].isIntersecting) {
+          loadMore();
         }
       },
       { threshold: 0.1 }
     );
 
-    if (loaderRef.current) {
-      observer.observe(loaderRef.current);
-    }
+    observer.observe(currentLoader);
 
     return () => observer.disconnect();
-  }, [visiblePokemons, displayedPokemons]);
+  }, [loadMore]);
 
   const containerStyle = {
     width: '100%',
